@@ -100,7 +100,7 @@ function buildKeyboard() {
             bkoMesh.translateZ(-.0000001);
             
             let bkiMesh = new THREE.Mesh(blackKeyInner, new THREE.MeshBasicMaterial({
-                color: 0x1f262f
+                color: 0x2a3139  // Slightly lighter than 0x1f262f so black keys are visible
             }));
             bkiMesh.userData.noteIndex = keyGroup.userData.index;
             keyboardInteractives.push(bkiMesh);
@@ -156,7 +156,7 @@ function displayKeyboard() {
     for (let i = 0; i < keys.length; i++) {
         
         if(i < pitchshift || i >= pitchshift + 12 || notes[i - pitchshift] == false) {
-            keys[i].children[0].material.color = new THREE.Color(0x1f262f);
+            keys[i].children[0].material.color = new THREE.Color(0x2a3139);  // Slightly lighter for visibility
         } else {
 
             //if(isRoot || i === pitchshift + 12) {
@@ -209,7 +209,7 @@ function playKeyboardNote(n) {
 }
 
 function getKeyBaseColor(relativeNoteIndex) {
-    const baseColor = new THREE.Color(0x1f262f);
+    const baseColor = new THREE.Color(0x2a3139);  // Match the black key color
 
     if(!masterGroup || !masterGroup.children.length) {
         return baseColor;
