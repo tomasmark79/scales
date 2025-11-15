@@ -19,28 +19,27 @@ function calculateScaleMultiplier() {
 
 // Adjust keyboard position and size based on viewport
 function updateKeyboardPosition() {
+    const oldScale = currentScaleMultiplier;
     currentScaleMultiplier = calculateScaleMultiplier();
     KEYBOARD_VERTICAL_OFFSET = BASE_VERTICAL_OFFSET;
     
-    // If keyboard already exists, update it
-    if (keyboardGroup) {
-        keyboardGroup.scale.set(currentScaleMultiplier, currentScaleMultiplier, 1);
-        keyboardGroup.position.y = KEYBOARD_VERTICAL_OFFSET;
+    // If keyboard exists and scale changed, rebuild it
+    if (keyboardGroup && oldScale !== currentScaleMultiplier) {
+        // Remove old keyboard
+        scene.remove(keyboardGroup);
+        keyboardInteractives = [];
         
-        // No need to adjust X position - keys are already centered around 0
-        keyboardGroup.position.x = 0;
-        
-        // Update display if needed
-        if (typeof displayKeyboard === 'function' && masterGroup && masterGroup.children.length > 0) {
-            displayKeyboard();
-        }
+        // Rebuild with new scale
+        buildKeyboard();
     }
 }
 
 function buildKeyboard() {
     keyboardGroup = new THREE.Group();
     let whiteKeyIndices = [0,2,4,5,7,9,11,12,14,16,17,19,21,23];
-    let whiteKeyThickness = 0.75 * BASE_SIZE_MULTIPLIER;
+    
+    // Apply scale multiplier directly to dimensions instead of using group.scale
+    let whiteKeyThickness = 0.75 * BASE_SIZE_MULTIPLIER * currentScaleMultiplier;
     let whiteKeyBorder = whiteKeyThickness / 7;
     let whiteKeyWidth = whiteKeyThickness - whiteKeyBorder;
 
@@ -68,14 +67,14 @@ function buildKeyboard() {
         
         keyGroup.add(wkiMesh, wkoMesh);
 
-        // Position keys centered around 0 (not starting from 0)
+        // Position keys centered around 0
         keyGroup.position.x = keyboardCenterOffset + whiteKeyWidth * i;
         keyGroup.translateZ(carouselRadius);
 
         keyboardGroup.add(keyGroup);
     }
 
-    let blackKeyThickness = 0.45 * BASE_SIZE_MULTIPLIER;
+    let blackKeyThickness = 0.45 * BASE_SIZE_MULTIPLIER * currentScaleMultiplier;
     let blackKeyIndices = [1,3,6,8,10,13,15,18,20,22];
     let blackKeyBorder = blackKeyThickness / 7;
 
@@ -117,13 +116,9 @@ function buildKeyboard() {
         return a.userData.index - b.userData.index;
     });
 
-    // Apply initial scale
-    keyboardGroup.scale.set(currentScaleMultiplier, currentScaleMultiplier, 1);
-    
-    // No need to adjust group position - keys are already centered around 0
+    // Don't apply scale - dimensions are already scaled
+    // Just set position
     keyboardGroup.position.x = 0;
-    
-    // Set initial Y position
     keyboardGroup.position.y = KEYBOARD_VERTICAL_OFFSET;
 
     scene.add(keyboardGroup);
