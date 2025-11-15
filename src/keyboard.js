@@ -103,7 +103,7 @@ function buildKeyboard() {
             let blackKeyInner = new THREE.BoxBufferGeometry(blackKeyThickness - blackKeyBorder, blackKeyThickness * 3 - blackKeyBorder, 0.01);
 
             let bkoMesh = new THREE.Mesh(blackKeyOutline, new THREE.MeshBasicMaterial({
-                color: 0x666666,
+                color: 0xcccccc,  // Lighter outline for black keys to be visible on mobile
                 side: THREE.DoubleSide,
                 depthTest: true,
                 depthWrite: true
