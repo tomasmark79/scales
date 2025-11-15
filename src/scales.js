@@ -465,6 +465,11 @@ function visualize(data){
             categorySet = new Set(categoryList);
 
             scene.add(masterGroup);
+            
+            // Update carousel position for responsive design (defined in keyboard.js)
+            if (typeof updateCarouselPosition === 'function') {
+                updateCarouselPosition();
+            }
 
             // hide all scales except the active one
             updateScaleVisibility();

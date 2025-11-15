@@ -3,6 +3,7 @@ let KEYBOARD_SIZE_MULTIPLIER = 0.7;
 let KEYBOARD_VERTICAL_OFFSET = 6.2;
 const BASE_SIZE_MULTIPLIER = 0.7;
 const BASE_VERTICAL_OFFSET = 6.2;
+const MOBILE_VERTICAL_OFFSET = 3.5;  // Lower position for mobile (smaller number = lower on screen)
 let currentScaleMultiplier = 1.0;
 
 // Calculate scale multiplier based on viewport
@@ -17,11 +18,41 @@ function calculateScaleMultiplier() {
         Math.min(1, Math.max(0, (viewportWidth - minWidth) / (maxWidth - minWidth)));
 }
 
+// Calculate vertical offset based on viewport (lower on mobile)
+function calculateVerticalOffset() {
+    const viewportWidth = window.innerWidth;
+    const mobileBreakpoint = 768;
+    
+    // On mobile (width < 768), use lower offset; on desktop use base offset
+    if (viewportWidth < mobileBreakpoint) {
+        return MOBILE_VERTICAL_OFFSET;
+    }
+    return BASE_VERTICAL_OFFSET;
+}
+
+// Update carousel (masterGroup) position for responsive design
+function updateCarouselPosition() {
+    if (!masterGroup) return;
+    
+    const viewportWidth = window.innerWidth;
+    const mobileBreakpoint = 768;
+    
+    // On mobile, move carousel down (negative Y value)
+    if (viewportWidth < mobileBreakpoint) {
+        masterGroup.position.y = -8;  // Move down on mobile
+    } else {
+        masterGroup.position.y = 0;   // Default position on desktop
+    }
+}
+
 // Adjust keyboard position and size based on viewport
 function updateKeyboardPosition() {
     const oldScale = currentScaleMultiplier;
     currentScaleMultiplier = calculateScaleMultiplier();
-    KEYBOARD_VERTICAL_OFFSET = BASE_VERTICAL_OFFSET;
+    KEYBOARD_VERTICAL_OFFSET = calculateVerticalOffset();
+    
+    // Update carousel position based on viewport
+    updateCarouselPosition();
     
     // Only rebuild if scale changed significantly (more than 1%)
     const scaleChange = Math.abs(currentScaleMultiplier - oldScale);
