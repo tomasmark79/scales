@@ -181,6 +181,9 @@ function displayKeyboard() {
             isRoot = false;
         };
         
+        // Mark material as needing update for mobile rendering
+        keys[i].children[0].material.needsUpdate = true;
+        
     }
 
 }
