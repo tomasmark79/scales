@@ -109,7 +109,7 @@ function buildKeyboard() {
 
             // Position black keys centered around 0 (same offset as white keys)
             keyGroup.position.x = keyboardCenterOffset + whiteKeyThickness / 2 - whiteKeyBorder / 2 + whiteKeyWidth * j;
-            keyGroup.translateZ(carouselRadius + 0.001);
+            keyGroup.translateZ(carouselRadius + 0.02);
             keyGroup.translateY((whiteKeyThickness - blackKeyThickness) * 3/2 - whiteKeyBorder / 2);
 
             keyboardGroup.add(keyGroup);
