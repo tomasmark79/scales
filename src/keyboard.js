@@ -99,17 +99,7 @@ function buildKeyboard() {
             let keyGroup = new THREE.Group();
             keyGroup.userData.index = blackKeyIndices.shift();
 
-            let blackKeyOutline = new THREE.BoxBufferGeometry(blackKeyThickness, blackKeyThickness * 3, 0.01);
             let blackKeyInner = new THREE.BoxBufferGeometry(blackKeyThickness - blackKeyBorder, blackKeyThickness * 3 - blackKeyBorder, 0.01);
-
-            let bkoMesh = new THREE.Mesh(blackKeyOutline, new THREE.MeshBasicMaterial({
-                color: 0xcccccc,  // Lighter outline for black keys to be visible on mobile
-                side: THREE.DoubleSide,
-                depthTest: true,
-                depthWrite: true
-            }));
-    
-            bkoMesh.translateZ(-.0000001);
             
             let bkiMesh = new THREE.Mesh(blackKeyInner, new THREE.MeshBasicMaterial({
                 color: 0x2a3139,  // Slightly lighter than 0x1f262f so black keys are visible
@@ -120,7 +110,14 @@ function buildKeyboard() {
             bkiMesh.userData.noteIndex = keyGroup.userData.index;
             keyboardInteractives.push(bkiMesh);
 
-            keyGroup.add(bkiMesh, bkoMesh);
+            // Create visible outline using EdgesGeometry
+            let edges = new THREE.EdgesGeometry(blackKeyInner);
+            let line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({
+                color: 0xaaaaaa,
+                linewidth: 2
+            }));
+
+            keyGroup.add(bkiMesh, line);
 
             // Position black keys centered around 0 (same offset as white keys)
             keyGroup.position.x = keyboardCenterOffset + whiteKeyThickness / 2 - whiteKeyBorder / 2 + whiteKeyWidth * j;
