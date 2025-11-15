@@ -21,7 +21,7 @@
                 overflow: hidden;
             }
             .note {
-                font-size: 2.5vh;
+                font-size: 1.5vh;
                 font-weight: lighter;
             }
             .header {
@@ -58,6 +58,93 @@
             }
             .category {
                 display: block;
+            }
+            .note-selector {
+                margin-top: 1.5vh;
+                margin-bottom: 1.5vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                gap: 0.8vh;
+                flex-wrap: wrap;
+            }
+            .midi-controls {
+                margin-top: 1vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 1vh;
+                flex-wrap: wrap;
+                font-size: 1.4vh;
+            }
+            .midi-btn {
+                background-color: rgba(0, 225, 158, 0.15);
+                border: 1px solid #00e19e;
+                color: #00e19e;
+                padding: 0.4vh 1vh;
+                font-size: 1.3vh;
+                cursor: pointer;
+                border-radius: 4px;
+                transition: all 0.2s;
+            }
+            .midi-btn:hover:not(:disabled) {
+                border-color: #f7d230;
+                color: #f7d230;
+            }
+            .midi-btn:disabled {
+                opacity: 0.5;
+                cursor: default;
+            }
+            .midi-status {
+                color: #cccccc;
+                min-height: 1.8vh;
+            }
+            .note-btn {
+                background-color: rgba(255, 255, 255, 0.1);
+                border: 1px solid #00e19e;
+                color: #00e19e;
+                padding: 0.3vh 0.6vh;
+                font-size: 1.3vh;
+                cursor: pointer;
+                min-width: 2.5vh;
+                text-align: center;
+                transition: all 0.2s;
+                border-radius: 2px;
+            }
+            .note-btn:hover {
+                border-color: #f7d230;
+            }
+            .note-btn.active {
+                background-color: #f7d230;
+                border-color: #f7d230;
+                font-weight: bold;
+            }
+            .scale-selector {
+                margin-top: 1.5vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 0.8vh;
+                flex-wrap: wrap;
+            }
+            .scale-selector label {
+                font-size: 1.5vh;
+                color: #f7d230;
+            }
+            #scale-select {
+                background-color: #1f262f;
+                border: 1px solid #00e19e;
+                color: #FFFFFF;
+                font-size: 1.4vh;
+                padding: 0.4vh 0.8vh;
+                border-radius: 4px;
+                min-width: 18vh;
+                cursor: pointer;
+            }
+            #scale-select:focus {
+                outline: none;
+                border-color: #f7d230;
             }
             .overlay{
                 background-color: #1f262f;
@@ -109,19 +196,28 @@
                 <span id='name'></span>
                 <span class = 'category'><br>
                     Category: <span id='category'></span><br>
-                    Root: <a href='javascript:void(0)' id='decrease-root' style='color: #ffffff'>&#8681;</a> / <a href='javascript:void(0)' id='increase-root'>&#8679;</a><br>
-                    Show: <a href='javascript:void(0)' id='flat'>Flats</a> / <a href='javascript:void(0)' id='sharp'>Sharps</a><br>
-                    Interval Style:
-                    <span id="interval-styles">
-                        <a href='javascript:void(0)' id='arc'>Arcs</a> /
-                        <a href='javascript:void(0)' id='gear'>Gear</a> /
-                        <a href='javascript:void(0)' id='pie'>Wedges</a>
-                    </span>
+                    <div class='scale-selector'>
+                        <label for='scale-select'>Scale:</label>
+                        <select id='scale-select'></select>
+                    </div>
+                    <div class='note-selector' id='note-selector'></div>
+                    <div class='midi-controls'>
+                        <button id='midi-btn' class='midi-btn'>Enable MIDI</button>
+                        <span id='midi-status' class='midi-status'>Not connected</span>
+                    </div>
                 </span> 
             </div>
         </div>
         <div id="canvas"></div>
         <div class='footer'>
+            Show: <a href='javascript:void(0)' id='flat'>Flats</a> / <a href='javascript:void(0)' id='sharp'>Sharps</a><br>
+            Interval Style:
+            <span id="interval-styles">
+                <a href='javascript:void(0)' id='arc'>Arcs</a> /
+                <a href='javascript:void(0)' id='gear'>Gear</a> /
+                <a href='javascript:void(0)' id='pie'>Wedges</a>
+            </span>
+            <br><br>
             <span style='color: #00e19e'>See Scales</span><br>
             by Mark Racette <br>
             connect: <a href="mailto:markracette@gmail.com">email</a>

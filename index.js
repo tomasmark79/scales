@@ -1,16 +1,10 @@
 if ( WEBGL.isWebGLAvailable() ) {
 
-    document.getElementById('ready-btn').onclick = () => {
-    
-        audioCtx.resume();
-
-        animate();
-        flagUpdate = false;
-
-        document.getElementById('overlay').style.display = 'none';
-
-    }
-
+    // Auto-start the application
+    audioCtx.resume();
+    animate();
+    flagUpdate = false;
+    document.getElementById('overlay').style.display = 'none';
 
 } else {
 

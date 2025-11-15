@@ -14,11 +14,12 @@ let noteRadius;
 // required for interactivity
 let raycaster;
 let highlights = [], activeHighlight = null;
+let keyboardInteractives = [];
 let panels = [], activePanel = null;
 let mouse = new THREE.Vector2();
 let pitchshift = 0;
 let scaleshift = 0;
-let noteLabelType = 'flat';
+let noteLabelType = 'sharp';
 let intervalStyle = 'arc';  // arc | pie | gear ...
 let noteLabels = {
     sharp: ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'],
@@ -30,6 +31,11 @@ let pageElements = {
     category: null,
     description: null
 }
+let midiAccess = null;
+let midiEnabled = false;
+let midiInputs = new Map();
+let midiButtonEl = null;
+let midiStatusEl = null;
 
 // colors
 let green = '#00e19e';
@@ -64,11 +70,28 @@ function initDocument() {
     
         e = e || window.event;
 
+        const activeElement = document.activeElement;
+        const scaleSelect = document.getElementById('scale-select');
+        const isScaleSelectFocused = scaleSelect && activeElement === scaleSelect;
+        const isArrowKey = e.keyCode >= 37 && e.keyCode <= 40;
+
+        if (isScaleSelectFocused && isArrowKey) {
+            return;
+        }
+
         if (e.keyCode == '37') {
             rotateCarousel('left');
         }
         else if (e.keyCode == '39') {
             rotateCarousel('right');
+        }
+        else if (e.keyCode == '38') {
+            // Arrow Up - increase pitch
+            changePitch(1);
+        }
+        else if (e.keyCode == '40') {
+            // Arrow Down - decrease pitch
+            changePitch(-1);
         }
     
     }
@@ -77,6 +100,7 @@ function initDocument() {
         if(noteLabelType != 'flat') {
             noteLabelType = 'flat';
             createLabels(carouselRadius, pitchshift);
+            createNoteSelector();
         }
     }
 
@@ -84,6 +108,7 @@ function initDocument() {
         if(noteLabelType != 'sharp') {
             noteLabelType = 'sharp';
             createLabels(carouselRadius, pitchshift);
+            createNoteSelector();
         }
     }
 
@@ -97,16 +122,86 @@ function initDocument() {
       }
     }
 
-    document.getElementById('increase-root').onclick = () => {
-        changePitch(1);
-    }
-
-    document.getElementById('decrease-root').onclick = () => {
-        changePitch(-1);
-    }
-
     document.getElementById('name').style.color = green;
 
+    // Create note selector buttons
+    createNoteSelector();
+
+    setupMIDISupport();
+
+}
+
+function createNoteSelector() {
+    const container = document.getElementById('note-selector');
+    container.innerHTML = ''; // Clear existing buttons
+    
+    const notes = noteLabelType === 'sharp' ? noteLabels.sharp : noteLabels.flat;
+    
+    notes.forEach((note, index) => {
+        const btn = document.createElement('div');
+        btn.className = 'note-btn';
+        btn.textContent = note;
+        btn.dataset.pitch = index;
+        
+        if (index === pitchshift) {
+            btn.classList.add('active');
+        }
+        
+        btn.onclick = () => {
+            setPitch(index);
+        };
+        
+        container.appendChild(btn);
+    });
+}
+
+function createScaleSelector(scaleData = []) {
+    const selectEl = document.getElementById('scale-select');
+    if (!selectEl) {
+        return;
+    }
+
+    selectEl.innerHTML = '';
+
+    scaleData.forEach((scale, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = scale.name;
+        selectEl.appendChild(option);
+    });
+
+    selectEl.value = scaleshift;
+
+    selectEl.onchange = (event) => {
+        const selectedIndex = parseInt(event.target.value, 10);
+        if (!Number.isNaN(selectedIndex)) {
+            setScaleIndex(selectedIndex, true);
+        }
+    };
+}
+
+function updateScaleSelectorValue() {
+    const selectEl = document.getElementById('scale-select');
+    if (selectEl && selectEl.value !== String(scaleshift)) {
+        selectEl.value = scaleshift;
+    }
+}
+
+function setPitch(newPitch) {
+    pitchshift = newPitch;
+    
+    // Update note selector buttons
+    const buttons = document.querySelectorAll('.note-btn');
+    buttons.forEach((btn, index) => {
+        if (index === pitchshift) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+    
+    createLabels(carouselRadius, pitchshift);
+    displayKeyboard();
 }
 
 function init() {
@@ -122,7 +217,7 @@ function init() {
     const clock = new THREE.Clock();
 
     // @TODO: make the radius responsive to the number of scales in the data
-    carouselRadius = 70;
+    carouselRadius = 100;
 
     let aspect = width/height;
     camera = new THREE.PerspectiveCamera(60, aspect, 1, carouselRadius/2);
@@ -276,6 +371,7 @@ function visualize(data){
                 scaleGroup.userData.index = i;
                 scaleGroup.userData.name = data[i].name;
                 scaleGroup.userData.category = data[i].category;
+                scaleGroup.userData.feelings = data[i].feelings;
 
                 categoryList.push(data[i].category);
                 
@@ -300,6 +396,9 @@ function visualize(data){
             categorySet = new Set(categoryList);
 
             scene.add(masterGroup);
+
+            createScaleSelector(scene.userData.data || []);
+            updateScaleSelectorValue();
 
             resolve();
   
@@ -356,26 +455,10 @@ function createRings(notes, group, size, distance, thickness){
 }
 
 function changePitch(n) {
-
-    pitchshift + n < 0 ? 0 : pitchshift + n > 11 ? 11 : pitchshift += n;
-
-    if(pitchshift <= 1 || pitchshift >= 10) {
-        switch(pitchshift){
-            case 0: 
-                document.getElementById('decrease-root').style.color = '#ffffff'; break;
-            case 1:
-                document.getElementById('decrease-root').style.color = '#ff4c7a'; break;
-            case 11: 
-                document.getElementById('increase-root').style.color = '#ffffff'; break;
-            case 10:
-                document.getElementById('increase-root').style.color = '#ff4c7a'; break;
-            default: break;
-        }
+    const newPitch = pitchshift + n;
+    if (newPitch >= 0 && newPitch <= 11) {
+        setPitch(newPitch);
     }
-
-    createLabels(carouselRadius, pitchshift);
-    displayKeyboard();
-    
 }
 
 function createLabels(distance, pitchshift) {
@@ -471,7 +554,7 @@ function updateLabels(notes, timeout) {
         let noteCount = data.notes.filter((e) => {return e==true;}).length;
 
         document.getElementById('name').innerText = data.name + ` (${noteCount})`;
-        document.getElementById('category').innerText = data.category;
+        document.getElementById('category').innerText = data.category + ' · ' + data.feelings;
         document.getElementById('category').style.color = '#ff4c7a';
 
         for(let i = 0; i < noteLabels.elements.length; i++) {
@@ -830,21 +913,38 @@ function createArcCurve(s0, s1) {
 
 }
     
-function rotateCarousel(dir){
+function setScaleIndex(newIndex, animate = true) {
+    if (typeof newIndex !== 'number' || !Number.isFinite(dataLength) || dataLength === 0) {
+        return;
+    }
 
-    if(dir == 'left'){
+    let normalizedIndex = ((newIndex % dataLength) + dataLength) % dataLength;
 
-        scaleshift = scaleshift - 1 < 0 ? dataLength - 1 : scaleshift - 1;
+    if (normalizedIndex === scaleshift) {
+        updateScaleSelectorValue();
+        return;
+    }
 
-    } else if(dir == 'right') {
-        
-        scaleshift = scaleshift + 1 == dataLength ? 0 : scaleshift + 1;
+    scaleshift = normalizedIndex;
 
+    animateCarouselToCurrentScale(animate);
+
+    updateLabels(masterGroup.children[scaleshift].userData.notes, animate);
+    displayKeyboard();
+    updateScaleSelectorValue();
+}
+
+function animateCarouselToCurrentScale(animate) {
+    const targetRotation = - scaleshift * Math.PI * 2 / dataLength;
+
+    if (!animate) {
+        carouselRot.amount = targetRotation;
+        return;
     }
 
     let t = new TWEEN.Tween(carouselRot);
 
-        t.to({amount: - scaleshift * Math.PI * 2 / dataLength}, 300)
+    t.to({amount: targetRotation}, 300)
         .easing(TWEEN.Easing.Cubic.In)
         .onStart(() => {
             flagUpdate = true;
@@ -858,9 +958,23 @@ function rotateCarousel(dir){
         .start();
 
     tweens.add(t);
+}
 
-    updateLabels(masterGroup.children[scaleshift].userData.notes, true);
-    displayKeyboard();
+function rotateCarousel(dir){
+
+    let newIndex = scaleshift;
+
+    if(dir == 'left'){
+
+        newIndex = scaleshift - 1 < 0 ? dataLength - 1 : scaleshift - 1;
+
+    } else if(dir == 'right') {
+        
+        newIndex = scaleshift + 1 == dataLength ? 0 : scaleshift + 1;
+
+    }
+
+    setScaleIndex(newIndex, true);
 
 }
 
@@ -887,12 +1001,8 @@ function screenPosition(obj, camera){
 function playNote(obj, pitchshift) {
     if(!flagUpdate){ // prevent notes from playing during certain animations
 
-        // play the audio corresponding to the note
         let n = obj.userData.note;
-        let source = audioCtx.createBufferSource();
-        source.buffer = audioBuffers[n + pitchshift];
-        source.connect(audioCtx.destination);
-        source.start(0);
+        triggerNoteAudio(n);
 
         // 'spin' the geometries associated with the note
         let ring = obj.userData.ring
@@ -912,11 +1022,25 @@ function playNote(obj, pitchshift) {
 
         tweens.add(t);
 
-        // register the note on the keyboard as well
-        playKeyboardNote(n)
-
     }
 
+}
+
+function triggerNoteAudio(noteIndex) {
+    const bufferIndex = noteIndex + pitchshift;
+    const buffer = audioBuffers[bufferIndex];
+
+    if (!buffer) {
+        return;
+    }
+
+    let source = audioCtx.createBufferSource();
+    source.buffer = buffer;
+    source.connect(audioCtx.destination);
+    source.start(0);
+
+    // register the note on the keyboard as well
+    playKeyboardNote(noteIndex);
 }
 
 function resize(){
@@ -937,9 +1061,221 @@ function onMouseMove(event) {
 }
 
 function onMouseDown(event) {
+    if (event.target.closest('#scale-select')) {
+        return;
+    }
+
+    if (tryPlayKeyboardNote(event)) {
+        event.preventDefault();
+        return;
+    }
+
     event.preventDefault();
     if(activePanel != null) {
         rotateCarousel(activePanel.userData.direction);
         activePanel = null;
+    }
+}
+
+function tryPlayKeyboardNote(event) {
+    if (!keyboardInteractives.length || !keyboardGroup || !masterGroup || !masterGroup.children.length) {
+        return false;
+    }
+
+    let pointer = new THREE.Vector2();
+    pointer.x = ( event.clientX / width ) * 2 - 1;
+    pointer.y = - ( event.clientY / height ) * 2 + 1;
+
+    let clickRaycaster = new THREE.Raycaster();
+    clickRaycaster.setFromCamera(pointer, camera);
+
+    let intersects = clickRaycaster.intersectObjects(keyboardInteractives, false);
+
+    if (!intersects.length) {
+        return false;
+    }
+
+    let noteIndex = intersects[0].object.userData.noteIndex;
+
+    if (typeof noteIndex !== 'number') {
+        return false;
+    }
+
+    const currentScaleNotes = masterGroup.children[scaleshift].userData.notes;
+    const relativeIndex = ((noteIndex - pitchshift) % 12 + 12) % 12;
+
+    if (!currentScaleNotes[relativeIndex]) {
+        return false;
+    }
+
+    triggerNoteAudio(relativeIndex);
+    return true;
+}
+
+function setupMIDISupport() {
+    midiButtonEl = document.getElementById('midi-btn');
+    midiStatusEl = document.getElementById('midi-status');
+
+    if (!midiButtonEl || !midiStatusEl) {
+        return;
+    }
+
+    if (!navigator.requestMIDIAccess) {
+        midiButtonEl.disabled = true;
+        midiButtonEl.innerText = 'MIDI unsupported';
+        midiStatusEl.innerText = 'Web MIDI API is not available in this browser.';
+        return;
+    }
+
+    midiButtonEl.onclick = () => {
+        if (midiEnabled) {
+            rescanMIDIInputs();
+        } else {
+            requestMIDIAccess();
+        }
+    };
+}
+
+function requestMIDIAccess() {
+    if (!navigator.requestMIDIAccess || midiEnabled) {
+        return;
+    }
+
+    if (midiButtonEl) {
+        midiButtonEl.disabled = true;
+        midiButtonEl.innerText = 'Connecting…';
+    }
+    updateMIDIStatus('Requesting access to MIDI devices…');
+
+    navigator.requestMIDIAccess({sysex: false}).then(onMIDISuccess, onMIDIFailure);
+}
+
+function onMIDISuccess(access) {
+    midiAccess = access;
+    midiEnabled = true;
+
+    midiAccess.onstatechange = handleMIDIStateChange;
+
+    midiInputs.clear();
+    access.inputs.forEach(attachMIDIInput);
+
+    if (midiButtonEl) {
+        midiButtonEl.disabled = false;
+        midiButtonEl.innerText = 'Refresh MIDI';
+    }
+
+    updateMIDIStatus();
+    resumeAudioContextIfNeeded();
+}
+
+function onMIDIFailure(err) {
+    console.error('Unable to access MIDI devices', err);
+    midiEnabled = false;
+    if (midiButtonEl) {
+        midiButtonEl.disabled = false;
+        midiButtonEl.innerText = 'Enable MIDI';
+    }
+    updateMIDIStatus('Failed to access MIDI devices. Check browser permissions.');
+}
+
+function handleMIDIStateChange(event) {
+    if (!event || !event.port || event.port.type !== 'input') {
+        return;
+    }
+
+    if (event.port.state === 'connected') {
+        attachMIDIInput(event.port);
+    } else if (event.port.state === 'disconnected') {
+        detachMIDIInput(event.port.id);
+    }
+
+    updateMIDIStatus();
+}
+
+function attachMIDIInput(input) {
+    if (!input) {
+        return;
+    }
+
+    midiInputs.set(input.id, input);
+    input.onmidimessage = handleMIDIMessage;
+}
+
+function detachMIDIInput(id) {
+    if (!id || !midiInputs.has(id)) {
+        return;
+    }
+
+    let input = midiInputs.get(id);
+    if (input) {
+        input.onmidimessage = null;
+    }
+    midiInputs.delete(id);
+}
+
+function rescanMIDIInputs() {
+    if (!midiAccess) {
+        requestMIDIAccess();
+        return;
+    }
+
+    midiInputs.clear();
+    midiAccess.inputs.forEach(attachMIDIInput);
+    updateMIDIStatus();
+}
+
+function updateMIDIStatus(message) {
+    if (!midiStatusEl) {
+        return;
+    }
+
+    if (message) {
+        midiStatusEl.innerText = message;
+        return;
+    }
+
+    if (!midiEnabled) {
+        midiStatusEl.innerText = 'Not connected';
+        return;
+    }
+
+    if (!midiInputs.size) {
+        midiStatusEl.innerText = 'No MIDI devices detected.';
+        return;
+    }
+
+    let names = Array.from(midiInputs.values()).map((input) => input.name || 'Unknown device');
+    midiStatusEl.innerText = `Listening: ${names.join(', ')}`;
+}
+
+function handleMIDIMessage(message) {
+    if (!message || !message.data || message.data.length < 3) {
+        return;
+    }
+
+    const [status, noteNumber, velocity] = message.data;
+    const command = status & 0xf0;
+
+    if (command === 0x90 && velocity > 0) {
+        handleMIDINoteOn(noteNumber);
+    }
+    // note-off events are ignored for now but could power visual feedback later
+}
+
+function handleMIDINoteOn(noteNumber) {
+    if (typeof noteNumber !== 'number' || !masterGroup || !masterGroup.children.length) {
+        return;
+    }
+
+    resumeAudioContextIfNeeded();
+
+    const relativeIndex = ((noteNumber % 12) - pitchshift + 12) % 12;
+
+    triggerNoteAudio(relativeIndex);
+}
+
+function resumeAudioContextIfNeeded() {
+    if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
     }
 }
