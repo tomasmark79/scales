@@ -105,7 +105,8 @@ function buildKeyboard() {
             bkiMesh.userData.noteIndex = keyGroup.userData.index;
             keyboardInteractives.push(bkiMesh);
 
-            keyGroup.add(bkiMesh, bkoMesh);
+            // keyGroup.add(bkiMesh, bkoMesh);
+            keyGroup.add(bkiMesh);
 
             // Position black keys centered around 0 (same offset as white keys)
             keyGroup.position.x = keyboardCenterOffset + whiteKeyThickness / 2 - whiteKeyBorder / 2 + whiteKeyWidth * j;
