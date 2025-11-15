@@ -113,8 +113,8 @@ function buildKeyboard() {
             // Create visible outline using EdgesGeometry
             let edges = new THREE.EdgesGeometry(blackKeyInner);
             let line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({
-                color: 0xaaaaaa,
-                linewidth: 2
+                color: 0x888888,
+                linewidth: 1
             }));
 
             keyGroup.add(bkiMesh, line);
