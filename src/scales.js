@@ -40,6 +40,7 @@ let midiButtonEl = null;
 let midiStatusEl = null;
 let midiFilterEl = null;
 let midiFilterScaleOnly = true;
+let scalesData = null;
 
 // colors
 let green = '#00e19e';
@@ -58,6 +59,7 @@ let audioBuffers = [];
 init();
 loadAudio();
 loadData('./scales.json', (data) => {
+    scalesData = data;
     visualize(data).then(() => {
         console.log(scene);
     });
@@ -1185,6 +1187,100 @@ function setupMIDISupport() {
             requestMIDIAccess();
         }
     };
+
+    setupScalesLibrary();
+}
+
+function setupScalesLibrary() {
+    const libraryBtn = document.getElementById('scales-library-btn');
+    const modal = document.getElementById('scales-library-modal');
+    const closeBtn = document.querySelector('.scales-library-close');
+    const listContainer = document.getElementById('scales-library-list');
+
+    if (!libraryBtn || !modal || !closeBtn || !listContainer) {
+        return;
+    }
+
+    libraryBtn.onclick = () => {
+        if (scalesData) {
+            renderScalesLibrary(scalesData, listContainer);
+            modal.style.display = 'block';
+        }
+    };
+
+    closeBtn.onclick = () => {
+        modal.style.display = 'none';
+    };
+
+    window.onclick = (event) => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    };
+}
+
+function renderScalesLibrary(data, container) {
+    const categories = {};
+    
+    data.forEach((scale, index) => {
+        if (!categories[scale.category]) {
+            categories[scale.category] = [];
+        }
+        categories[scale.category].push({ scale, index });
+    });
+
+    container.innerHTML = '';
+
+    const categoryOrder = ['Běžné', 'Blues', 'Modal', 'Jazzové', 'Exotické', 'Neobvyklé'];
+    
+    categoryOrder.forEach(categoryName => {
+        if (categories[categoryName]) {
+            const section = document.createElement('div');
+            section.className = 'scale-category-section';
+
+            const title = document.createElement('h2');
+            title.className = 'scale-category-title';
+            title.textContent = categoryName;
+            section.appendChild(title);
+
+            categories[categoryName].forEach(({ scale, index }) => {
+                const item = document.createElement('div');
+                item.className = 'scale-item';
+                item.style.cursor = 'pointer';
+
+                const name = document.createElement('div');
+                name.className = 'scale-item-name';
+                name.textContent = scale.name;
+                item.appendChild(name);
+
+                const details = document.createElement('div');
+                details.className = 'scale-item-details';
+                
+                const intervalCount = scale.intervals.length;
+                const intervalPattern = scale.intervals.join(' - ');
+
+                details.innerHTML = `
+                    <strong>Počet tónů:</strong> ${intervalCount}<br>
+                    <strong>Vzorec intervalů:</strong> ${intervalPattern}<br>
+                    <strong>Pocit:</strong> ${scale.feelings}<br>
+                    <strong>Žánr:</strong> ${scale.genre}<br>
+                    <strong>Použití:</strong> ${scale.usage}
+                `;
+                
+                item.appendChild(details);
+                
+                // Add click handler to select the scale
+                item.onclick = () => {
+                    setScaleIndex(index, true);
+                    document.getElementById('scales-library-modal').style.display = 'none';
+                };
+                
+                section.appendChild(item);
+            });
+
+            container.appendChild(section);
+        }
+    });
 }
 
 function requestMIDIAccess() {
