@@ -103,13 +103,19 @@ function buildKeyboard() {
             let blackKeyInner = new THREE.BoxBufferGeometry(blackKeyThickness - blackKeyBorder, blackKeyThickness * 3 - blackKeyBorder, 0.01);
 
             let bkoMesh = new THREE.Mesh(blackKeyOutline, new THREE.MeshBasicMaterial({
-                color: 0x666666
+                color: 0x666666,
+                side: THREE.DoubleSide,
+                depthTest: true,
+                depthWrite: true
             }));
     
-            bkoMesh.translateZ(0.0001);  // Move outline in front instead of behind
+            bkoMesh.translateZ(-.0000001);
             
             let bkiMesh = new THREE.Mesh(blackKeyInner, new THREE.MeshBasicMaterial({
-                color: 0x2a3139  // Slightly lighter than 0x1f262f so black keys are visible
+                color: 0x2a3139,  // Slightly lighter than 0x1f262f so black keys are visible
+                side: THREE.DoubleSide,
+                depthTest: true,
+                depthWrite: true
             }));
             bkiMesh.userData.noteIndex = keyGroup.userData.index;
             keyboardInteractives.push(bkiMesh);
