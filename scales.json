@@ -40,6 +40,16 @@
         ]
     },
     {
+        "name" : "Harmonic Major",
+        "category" : "Běžné",
+        "feelings" : "neobvyklý, exotický, jazzový, sofistikovaný",
+        "genre" : "jazz, klasická hudba",
+        "usage" : "jazzové harmonické progresy, klasické kompozice",
+        "intervals" : [
+            2,2,1,2,1,3,1
+        ]
+    },
+    {
         "name" : "Major Pentatonic",
         "category" : "Běžné",
         "feelings" : "teplý, otevřený, klidný, jednoduchý",
@@ -57,6 +67,16 @@
         "usage" : "rocková kytarová sóla, bluesové riffy",
         "intervals" : [
             3,2,2,3,2
+        ]
+    },
+    {
+        "name" : "Egyptian Pentatonic",
+        "category" : "Běžné",
+        "feelings" : "mystický, exotický, starobylý, orientální",
+        "genre" : "world music, ambient",
+        "usage" : "etnická hudba, orientální motivy, meditativní skladby",
+        "intervals" : [
+            2,3,2,3,2
         ]
     },
     {
@@ -160,6 +180,26 @@
         ]
     },
     {
+        "name" : "Mixolydian b6",
+        "category" : "Modal",
+        "feelings" : "bluesový, napjatý, jazzový, temný",
+        "genre" : "jazz, blues rock",
+        "usage" : "jazzové improvizace, dominantní akordy s alteracemi",
+        "intervals" : [
+            2,2,1,2,1,2,2
+        ]
+    },
+    {
+        "name" : "Dorian b2",
+        "category" : "Modal",
+        "feelings" : "orientální, tajemný, exotický, sofistikovaný",
+        "genre" : "jazz fusion, world music",
+        "usage" : "fusion improvizace, etnické motivy",
+        "intervals" : [
+            1,2,2,2,2,1,2
+        ]
+    },
+    {
         "name" : "Bebop Dominant",
         "category" : "Jazzové",
         "feelings" : "swingový, melodický, plynulý, jazzový",
@@ -180,6 +220,16 @@
         ]
     },
     {
+        "name" : "Bebop Minor",
+        "category" : "Jazzové",
+        "feelings" : "swingový, sofistikovaný, melodický, cool",
+        "genre" : "bebop, modern jazz",
+        "usage" : "improvizace přes mollové akordy, bebop walking bass linky",
+        "intervals" : [
+            2,1,2,2,1,1,2,1
+        ]
+    },
+    {
         "name" : "Hungarian Minor",
         "category" : "Exotické",
         "feelings" : "dramatický, napínavý, temný, vášnivý",
@@ -197,6 +247,56 @@
         "usage" : "blízkovýchodní melodie, progresivní metal, mystické pasáže",
         "intervals" : [
             1,3,1,2,1,3,1
+        ]
+    },
+    {
+        "name" : "Persian",
+        "category" : "Exotické",
+        "feelings" : "orientální, mystický, exotický, starobylý",
+        "genre" : "perská hudba, world music",
+        "usage" : "tradiční perské melodie, blízkovýchodní improvizace",
+        "intervals" : [
+            1,3,1,1,2,3,1
+        ]
+    },
+    {
+        "name" : "Gypsy Minor",
+        "category" : "Exotické",
+        "feelings" : "cigánský, vášnivý, dramatický, temperamentní",
+        "genre" : "cikánská hudba, metal, balkanská hudba",
+        "usage" : "romská hudba, balkánské melodie, neoclassical metal",
+        "intervals" : [
+            2,1,3,1,1,2,2
+        ]
+    },
+    {
+        "name" : "Neapolitan Minor",
+        "category" : "Exotické",
+        "feelings" : "dramatický, temný, teatrální, intenzivní",
+        "genre" : "klasická hudba, metal, filmová hudba",
+        "usage" : "barokní skladby, symfonický metal, dramatické soundtracky",
+        "intervals" : [
+            1,2,2,2,1,3,1
+        ]
+    },
+    {
+        "name" : "Neapolitan Major",
+        "category" : "Exotické",
+        "feelings" : "neobvyklý, mystický, dramatický, jemný",
+        "genre" : "klasická hudba, filmová hudba",
+        "usage" : "klasické kompozice, experimentální soundtracky",
+        "intervals" : [
+            1,2,2,2,2,2,1
+        ]
+    },
+    {
+        "name" : "Jewish (Ahava Raba)",
+        "category" : "Exotické",
+        "feelings" : "radostný, náboženský, slavnostní, tradiční",
+        "genre" : "klezmer, židovská hudba",
+        "usage" : "klezmer melodie, židovské svatební písně, tradiční tance",
+        "intervals" : [
+            1,3,1,2,1,2,2
         ]
     },
     {
