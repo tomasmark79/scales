@@ -363,14 +363,17 @@ function render(time){
             let noteIndex = intersectsKeyboard[0].object.userData.noteIndex;
             
             if(typeof noteIndex === 'number') {
-                const currentScaleNotes = masterGroup.children[scaleshift].userData.notes;
-                const relativeIndex = ((noteIndex - pitchshift) % 12 + 12) % 12;
-                
-                if(currentScaleNotes[relativeIndex]) {
-                    // Přehraj notu pouze pokud se změnila
-                    if(lastKeyboardNoteIndex !== noteIndex) {
-                        triggerNoteAudio(relativeIndex);
-                        lastKeyboardNoteIndex = noteIndex;
+                // Check if key is within active range (pitchshift to pitchshift+12)
+                if (noteIndex >= pitchshift && noteIndex < pitchshift + 12) {
+                    const currentScaleNotes = masterGroup.children[scaleshift].userData.notes;
+                    const relativeIndex = noteIndex - pitchshift;
+                    
+                    if(currentScaleNotes[relativeIndex]) {
+                        // Přehraj notu pouze pokud se změnila
+                        if(lastKeyboardNoteIndex !== noteIndex) {
+                            triggerNoteAudio(relativeIndex);
+                            lastKeyboardNoteIndex = noteIndex;
+                        }
                     }
                 }
             }
@@ -1228,8 +1231,13 @@ function tryPlayKeyboardNote(event) {
         return false;
     }
 
+    // Check if key is within active range (pitchshift to pitchshift+12)
+    if (noteIndex < pitchshift || noteIndex >= pitchshift + 12) {
+        return false;
+    }
+
     const currentScaleNotes = masterGroup.children[scaleshift].userData.notes;
-    const relativeIndex = ((noteIndex - pitchshift) % 12 + 12) % 12;
+    const relativeIndex = noteIndex - pitchshift;
 
     if (!currentScaleNotes[relativeIndex]) {
         return false;
