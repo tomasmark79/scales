@@ -19,10 +19,8 @@ function calculateScaleMultiplier() {
 
 // Adjust keyboard position and size based on viewport
 function updateKeyboardPosition() {
-    console.log('updateKeyboardPosition() called');
     const oldScale = currentScaleMultiplier;
     currentScaleMultiplier = calculateScaleMultiplier();
-    console.log('oldScale:', oldScale, 'newScale:', currentScaleMultiplier);
     KEYBOARD_VERTICAL_OFFSET = BASE_VERTICAL_OFFSET;
     
     // Only rebuild if scale changed significantly (more than 1%)
@@ -30,7 +28,6 @@ function updateKeyboardPosition() {
     const threshold = 0.01;
     
     if (keyboardGroup && scaleChange > threshold) {
-        console.log('Rebuilding keyboard - scale change:', scaleChange);
         // Remove old keyboard
         scene.remove(keyboardGroup);
         keyboardInteractives = [];
@@ -42,13 +39,10 @@ function updateKeyboardPosition() {
         if (typeof displayKeyboard === 'function' && masterGroup && masterGroup.children.length > 0) {
             displayKeyboard();
         }
-    } else {
-        console.log('Scale change too small, skipping rebuild:', scaleChange);
     }
 }
 
 function buildKeyboard() {
-    console.log('buildKeyboard() called - currentScaleMultiplier:', currentScaleMultiplier);
     keyboardGroup = new THREE.Group();
     let whiteKeyIndices = [0,2,4,5,7,9,11,12,14,16,17,19,21,23];
     
@@ -68,7 +62,8 @@ function buildKeyboard() {
         let whiteKeyInner = new THREE.BoxBufferGeometry(whiteKeyThickness - whiteKeyBorder, whiteKeyThickness * 3 - whiteKeyBorder, 0.01);
 
         let wkoMesh = new THREE.Mesh(whiteKeyOutline, new THREE.MeshBasicMaterial({
-            color: 0x666666
+            color: 0x666666,
+            depthWrite: false  // Match black keys
         }));
 
         wkoMesh.translateZ(-.0000001);
@@ -77,9 +72,10 @@ function buildKeyboard() {
             color: 0x1f262f
         }));
         wkiMesh.userData.noteIndex = keyGroup.userData.index;
+        wkiMesh.userData.isInner = true;  // Mark as inner mesh
         keyboardInteractives.push(wkiMesh);
         
-        keyGroup.add(wkiMesh, wkoMesh);
+        keyGroup.add(wkoMesh, wkiMesh);  // Outline first, inner second - CONSISTENT with black keys
 
         // Position keys centered around 0
         keyGroup.position.x = keyboardCenterOffset + whiteKeyWidth * i;
@@ -99,25 +95,31 @@ function buildKeyboard() {
             let keyGroup = new THREE.Group();
             keyGroup.userData.index = blackKeyIndices.shift();
 
+            let blackKeyOutline = new THREE.BoxBufferGeometry(blackKeyThickness, blackKeyThickness * 3, 0.01);
             let blackKeyInner = new THREE.BoxBufferGeometry(blackKeyThickness - blackKeyBorder, blackKeyThickness * 3 - blackKeyBorder, 0.01);
+
+            let bkoMesh = new THREE.Mesh(blackKeyOutline, new THREE.MeshBasicMaterial({
+                color: 0x666666,
+                side: THREE.FrontSide,
+                depthTest: true,
+                depthWrite: false,  // Don't write to depth buffer
+                polygonOffset: true,
+                polygonOffsetFactor: -1,
+                polygonOffsetUnits: -1
+            }));
             
             let bkiMesh = new THREE.Mesh(blackKeyInner, new THREE.MeshBasicMaterial({
-                color: 0x2a3139,  // Slightly lighter than 0x1f262f so black keys are visible
-                side: THREE.DoubleSide,
+                color: 0x2a3139,
+                side: THREE.FrontSide,
                 depthTest: true,
-                depthWrite: true
+                depthWrite: true,
+                polygonOffset: false  // Inner mesh renders normally
             }));
             bkiMesh.userData.noteIndex = keyGroup.userData.index;
+            bkiMesh.userData.isInner = true;  // Mark as inner mesh
             keyboardInteractives.push(bkiMesh);
 
-            // Create visible outline using EdgesGeometry
-            let edges = new THREE.EdgesGeometry(blackKeyInner);
-            let line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({
-                color: 0x666666,  // Darker, subtler outline
-                linewidth: 1
-            }));
-
-            keyGroup.add(bkiMesh, line);
+            keyGroup.add(bkoMesh, bkiMesh);  // Add outline first, then inner on top
 
             // Position black keys centered around 0 (same offset as white keys)
             keyGroup.position.x = keyboardCenterOffset + whiteKeyThickness / 2 - whiteKeyBorder / 2 + whiteKeyWidth * j;
@@ -132,9 +134,6 @@ function buildKeyboard() {
     keyboardGroup.children.sort((a, b) => {
         return a.userData.index - b.userData.index;
     });
-
-    // Debug: log number of keys
-    console.log('Keyboard built: ' + keyboardGroup.children.length + ' keys total (14 white + 10 black = 24)');
 
     // Don't apply scale - dimensions are already scaled
     // Just set position
@@ -152,7 +151,6 @@ function buildKeyboard() {
 initKeyboard();
 
 function initKeyboard() {
-    console.log('initKeyboard() called');
     // Calculate initial scale before building keyboard
     currentScaleMultiplier = calculateScaleMultiplier();
     buildKeyboard();
@@ -168,16 +166,27 @@ function displayKeyboard() {
 
     for (let i = 0; i < keys.length; i++) {
         
+        // Find the inner mesh (the one with isInner flag)
+        // Structure is now: outline[0], inner[1] for ALL keys
+        let innerMesh = keys[i].children.find(child => child.userData && child.userData.isInner);
+        if (!innerMesh) {
+            innerMesh = keys[i].children[1];  // Inner is always at index 1 now
+        }
+        
+        if (!innerMesh || !innerMesh.material) {
+            continue;
+        }
+        
         if(i < pitchshift || i >= pitchshift + 12 || notes[i - pitchshift] == false) {
-            keys[i].children[0].material.color = new THREE.Color(0x2a3139);  // Slightly lighter for visibility
+            innerMesh.material.color = new THREE.Color(0x2a3139);
         } else {
 
             //if(isRoot || i === pitchshift + 12) {
             if(isRoot) {
                 // root is gold
-                keys[i].children[0].material.color = new THREE.Color(0xffd830);
+                innerMesh.material.color = new THREE.Color(0xffd830);
             } else {
-                keys[i].children[0].material.color = new THREE.Color(0x00e19e);
+                innerMesh.material.color = new THREE.Color(0x00e19e);
             }
 
             // after the first assignment switch isRoot
@@ -185,7 +194,7 @@ function displayKeyboard() {
         };
         
         // Mark material as needing update for mobile rendering
-        keys[i].children[0].material.needsUpdate = true;
+        innerMesh.material.needsUpdate = true;
         
     }
 
@@ -200,11 +209,19 @@ function playKeyboardNote(n) {
     let keys = keyboardGroup.children;
     let keyIndex = n + pitchshift;
 
-    if(!keys[keyIndex] || !keys[keyIndex].children.length) {
+    if(!keys[keyIndex] || keys[keyIndex].children.length < 2) {
         return;
     }
 
-    let key = keys[keyIndex].children[0];
+    // Get inner mesh (now at index 1 for all keys)
+    let key = keys[keyIndex].children.find(child => child.userData && child.userData.isInner);
+    if (!key) {
+        key = keys[keyIndex].children[1];  // Fallback to index 1
+    }
+    
+    if (!key || !key.material) {
+        return;
+    }
 
     let originalColor = getKeyBaseColor(n);
 
@@ -225,7 +242,7 @@ function playKeyboardNote(n) {
 }
 
 function getKeyBaseColor(relativeNoteIndex) {
-    const baseColor = new THREE.Color(0x2a3139);  // Match the black key color
+    const baseColor = new THREE.Color(0x2a3139);  // Default gray for non-scale notes
 
     if(!masterGroup || !masterGroup.children.length) {
         return baseColor;
@@ -234,25 +251,20 @@ function getKeyBaseColor(relativeNoteIndex) {
     const currentScale = masterGroup.children[scaleshift];
     const notes = currentScale && currentScale.userData && currentScale.userData.notes;
 
-    if(!Array.isArray(notes)) {
+    if(!Array.isArray(notes) || relativeNoteIndex < 0 || relativeNoteIndex >= notes.length) {
         return baseColor;
     }
 
-    const absoluteIndex = relativeNoteIndex + pitchshift;
-
-    if(absoluteIndex < pitchshift || absoluteIndex >= pitchshift + notes.length) {
+    // Check if this note is in the scale
+    if(!notes[relativeNoteIndex]) {
         return baseColor;
     }
 
-    const scaleIndex = absoluteIndex - pitchshift;
-
-    if(!notes[scaleIndex]) {
-        return baseColor;
+    // First note in scale is gold (root)
+    if(relativeNoteIndex === 0) {
+        return new THREE.Color(0xffd830);  // Gold
     }
 
-    if(scaleIndex === 0) {
-        return new THREE.Color(0xffd830);
-    }
-
-    return new THREE.Color(0x00e19e);
+    // Other scale notes are green
+    return new THREE.Color(0x00e19e);  // Green
 }
