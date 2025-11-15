@@ -1,6 +1,9 @@
 
 let KEYBOARD_SIZE_MULTIPLIER = 0.7;
 let KEYBOARD_VERTICAL_OFFSET = 6.2;
+const BASE_SIZE_MULTIPLIER = 0.7;
+const BASE_VERTICAL_OFFSET = 6.2;
+let currentScaleMultiplier = 1.0;
 
 // Adjust keyboard position and size based on viewport
 function updateKeyboardPosition() {
@@ -8,50 +11,42 @@ function updateKeyboardPosition() {
     const viewportHeight = window.innerHeight;
     const aspectRatio = viewportWidth / viewportHeight;
     
-    // Adjust size multiplier based on width
-    if (viewportWidth < 480) {
-        KEYBOARD_SIZE_MULTIPLIER = 0.35;
-    } else if (viewportWidth < 768) {
-        KEYBOARD_SIZE_MULTIPLIER = 0.5;
-    } else if (viewportWidth < 1024) {
-        KEYBOARD_SIZE_MULTIPLIER = 0.6;
-    } else {
-        KEYBOARD_SIZE_MULTIPLIER = 0.7;
-    }
+    // Calculate scale multiplier smoothly based on width (0.5 at 480px, 1.0 at 1200px+)
+    const minWidth = 320;
+    const maxWidth = 1200;
+    const minScale = 0.45;
+    const maxScale = 1.0;
     
-    // Calculate offset more smoothly based on viewport height
-    // Base offset + adjustment based on aspect ratio
-    const baseOffset = 6.2;
+    currentScaleMultiplier = minScale + (maxScale - minScale) * 
+        Math.min(1, Math.max(0, (viewportWidth - minWidth) / (maxWidth - minWidth)));
     
-    if (viewportHeight < 600) {
-        // Very small screens
-        KEYBOARD_VERTICAL_OFFSET = baseOffset - 1.5;
-    } else if (viewportHeight < 800) {
-        // Medium screens
-        KEYBOARD_VERTICAL_OFFSET = baseOffset - 1.0;
-    } else if (aspectRatio < 1.0) {
-        // Portrait mode on larger screens
-        KEYBOARD_VERTICAL_OFFSET = baseOffset - 0.5;
-    } else {
-        // Desktop/landscape
-        KEYBOARD_VERTICAL_OFFSET = baseOffset;
-    }
+    // Keep vertical offset constant - don't adjust it
+    // The perspective will handle the visual positioning
+    KEYBOARD_VERTICAL_OFFSET = BASE_VERTICAL_OFFSET;
     
-    // If keyboard already exists, rebuild it with new size
+    // If keyboard already exists, just scale it
     if (keyboardGroup) {
-        // Remove old keyboard
-        scene.remove(keyboardGroup);
-        keyboardInteractives.length = 0;
+        keyboardGroup.scale.set(currentScaleMultiplier, currentScaleMultiplier, 1);
+        // Keep Y position constant
+        keyboardGroup.position.y = KEYBOARD_VERTICAL_OFFSET;
         
-        // Rebuild with new size
-        buildKeyboard();
+        // Compensate X position for scale - divide by scale to keep visual position constant
+        const whiteKeyThickness = 0.75 * BASE_SIZE_MULTIPLIER;
+        const whiteKeyBorder = whiteKeyThickness / 7;
+        const centerOffset = -6.5 * (whiteKeyThickness - whiteKeyBorder);
+        keyboardGroup.position.x = centerOffset / currentScaleMultiplier;
+        
+        // Update display if needed
+        if (typeof displayKeyboard === 'function' && masterGroup && masterGroup.children.length > 0) {
+            displayKeyboard();
+        }
     }
 }
 
 function buildKeyboard() {
     keyboardGroup = new THREE.Group();
     let whiteKeyIndices = [0,2,4,5,7,9,11,12,14,16,17,19,21,23];
-    let whiteKeyThickness = 0.75 * KEYBOARD_SIZE_MULTIPLIER;
+    let whiteKeyThickness = 0.75 * BASE_SIZE_MULTIPLIER;
     let whiteKeyBorder = whiteKeyThickness / 7;
 
     for (let i = 0; i < 14; i++) {
@@ -75,14 +70,14 @@ function buildKeyboard() {
         
         keyGroup.add(wkiMesh, wkoMesh);
 
-        keyGroup.translateX((whiteKeyThickness - whiteKeyBorder) * i);
+        // Use position instead of translate for X coordinate
+        keyGroup.position.x = (whiteKeyThickness - whiteKeyBorder) * i;
         keyGroup.translateZ(carouselRadius);
-        keyGroup.translateY(KEYBOARD_VERTICAL_OFFSET);
 
         keyboardGroup.add(keyGroup);
     }
 
-    let blackKeyThickness = 0.45 * KEYBOARD_SIZE_MULTIPLIER;
+    let blackKeyThickness = 0.45 * BASE_SIZE_MULTIPLIER;
     let blackKeyIndices = [1,3,6,8,10,13,15,18,20,22];
     let blackKeyBorder = blackKeyThickness / 7;
 
@@ -110,9 +105,10 @@ function buildKeyboard() {
 
             keyGroup.add(bkiMesh, bkoMesh);
 
-            keyGroup.translateX(whiteKeyThickness / 2 - whiteKeyBorder + (whiteKeyThickness - whiteKeyBorder) * j);
+            // Use position instead of translate for X coordinate
+            keyGroup.position.x = whiteKeyThickness / 2 - whiteKeyBorder + (whiteKeyThickness - whiteKeyBorder) * j;
             keyGroup.translateZ(carouselRadius + .00001);
-            keyGroup.translateY(KEYBOARD_VERTICAL_OFFSET + (whiteKeyThickness - blackKeyThickness) * 3/2);
+            keyGroup.translateY((whiteKeyThickness - blackKeyThickness) * 3/2);
 
             keyboardGroup.add(keyGroup);
 
@@ -123,7 +119,12 @@ function buildKeyboard() {
         return a.userData.index - b.userData.index;
     });
 
-    keyboardGroup.translateX(-6.5 * (whiteKeyThickness - whiteKeyBorder));
+    // Set horizontal position (use position.x instead of translateX to avoid scale issues)
+    const centerOffset = -6.5 * (whiteKeyThickness - whiteKeyBorder);
+    keyboardGroup.position.x = centerOffset;
+    
+    // Set initial Y position
+    keyboardGroup.position.y = KEYBOARD_VERTICAL_OFFSET;
 
     scene.add(keyboardGroup);
     
