@@ -17,6 +17,8 @@ let highlights = [], activeHighlight = null;
 let keyboardInteractives = [];
 let panels = [], activePanel = null;
 let mouse = new THREE.Vector2();
+let isShiftPressed = false;
+let lastKeyboardNoteIndex = null;
 let pitchshift = 0;
 let scaleshift = 0;
 let noteLabelType = 'sharp';
@@ -71,6 +73,8 @@ function initDocument() {
     window.addEventListener('resize', resize, false);
     window.addEventListener('mousemove', onMouseMove, false);
     window.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
 
     document.onkeydown = (e) => {
     
@@ -318,7 +322,7 @@ function render(time){
 
     let intersects = raycaster.intersectObjects(highlights);
 
-    if(intersects.length > 0) {
+    if(intersects.length > 0 && isShiftPressed) {
         let obj = intersects[0].object;
         if(activeHighlight != obj) { // indicates a new highlight
             activeHighlight = obj;
@@ -348,6 +352,31 @@ function render(time){
             activePanel.material.opacity = 0.0;
             activePanel = null;
         }
+    }
+
+    // keyboard interactivity (hover with Shift pressed)
+    
+    if(isShiftPressed && keyboardInteractives.length > 0) {
+        let intersectsKeyboard = raycaster.intersectObjects(keyboardInteractives, false);
+        
+        if(intersectsKeyboard.length > 0) {
+            let noteIndex = intersectsKeyboard[0].object.userData.noteIndex;
+            
+            if(typeof noteIndex === 'number') {
+                const currentScaleNotes = masterGroup.children[scaleshift].userData.notes;
+                const relativeIndex = ((noteIndex - pitchshift) % 12 + 12) % 12;
+                
+                if(currentScaleNotes[relativeIndex]) {
+                    // Přehraj notu pouze pokud se změnila
+                    if(lastKeyboardNoteIndex !== noteIndex) {
+                        triggerNoteAudio(relativeIndex);
+                        lastKeyboardNoteIndex = noteIndex;
+                    }
+                }
+            }
+        }
+    } else {
+        lastKeyboardNoteIndex = null;
     }
 
     renderer.render(scene, camera);
@@ -1110,7 +1139,19 @@ function onMouseDown(event) {
         return;
     }
 
+    // Pokus přehrát notu na klaviatuře při kliknutí
     if (tryPlayKeyboardNote(event)) {
+        event.preventDefault();
+        return;
+    }
+
+    // Pokus přehrát notu na kruhu při kliknutí
+    raycaster.setFromCamera(mouse, camera);
+    let intersects = raycaster.intersectObjects(highlights);
+    
+    if(intersects.length > 0) {
+        let obj = intersects[0].object;
+        playNote(obj, pitchshift);
         event.preventDefault();
         return;
     }
@@ -1119,6 +1160,23 @@ function onMouseDown(event) {
     if(activePanel != null) {
         rotateCarousel(activePanel.userData.direction);
         activePanel = null;
+    }
+}
+
+function onKeyDown(event) {
+    if (event.key === 'Shift') {
+        isShiftPressed = true;
+    }
+}
+
+function onKeyUp(event) {
+    if (event.key === 'Shift') {
+        isShiftPressed = false;
+        lastKeyboardNoteIndex = null;
+        if(activeHighlight){
+            activeHighlight.material.opacity = 0.0;
+            activeHighlight = null;
+        }
     }
 }
 
