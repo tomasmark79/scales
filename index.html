@@ -78,6 +78,13 @@
                 flex-wrap: wrap;
                 font-size: 1.4vh;
             }
+            .midi-filter-toggle {
+                display: flex;
+                align-items: center;
+                gap: 0.5vh;
+                font-size: 1.2vh;
+                color: #cccccc;
+            }
             .midi-btn {
                 background-color: rgba(0, 225, 158, 0.15);
                 border: 1px solid #00e19e;
@@ -204,6 +211,10 @@
                     <div class='midi-controls'>
                         <button id='midi-btn' class='midi-btn'>Povolit MIDI</button>
                         <span id='midi-status' class='midi-status'>Nepřipojeno</span>
+                        <label class='midi-filter-toggle'>
+                            <input type='checkbox' id='midi-filter' checked>
+                            Hrát jen tóny ve stupnici
+                        </label>
                     </div>
                 </span> 
             </div>

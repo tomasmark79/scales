@@ -36,6 +36,8 @@ let midiEnabled = false;
 let midiInputs = new Map();
 let midiButtonEl = null;
 let midiStatusEl = null;
+let midiFilterEl = null;
+let midiFilterScaleOnly = true;
 
 // colors
 let green = '#00e19e';
@@ -1115,9 +1117,17 @@ function tryPlayKeyboardNote(event) {
 function setupMIDISupport() {
     midiButtonEl = document.getElementById('midi-btn');
     midiStatusEl = document.getElementById('midi-status');
+    midiFilterEl = document.getElementById('midi-filter');
 
     if (!midiButtonEl || !midiStatusEl) {
         return;
+    }
+
+    if (midiFilterEl) {
+        midiFilterScaleOnly = midiFilterEl.checked;
+        midiFilterEl.onchange = () => {
+            midiFilterScaleOnly = midiFilterEl.checked;
+        };
     }
 
     if (!navigator.requestMIDIAccess) {
@@ -1270,6 +1280,13 @@ function handleMIDINoteOn(noteNumber) {
     resumeAudioContextIfNeeded();
 
     const relativeIndex = ((noteNumber % 12) - pitchshift + 12) % 12;
+
+    if (midiFilterScaleOnly) {
+        const currentScaleNotes = masterGroup.children[scaleshift].userData.notes;
+        if (!currentScaleNotes || !currentScaleNotes[relativeIndex]) {
+            return;
+        }
+    }
 
     triggerNoteAudio(relativeIndex);
 }
