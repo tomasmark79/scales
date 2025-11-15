@@ -1,285 +1,325 @@
 <!DOCTYPE html>
 <html>
-	<head>
-        <meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <title>See Scales Plus – vizualizace stupnic</title>
-        <style>
-            body {
-                margin: 0;
-                overflow: hidden;
-                font-family: Arial, Helvetica, sans-serif;
-                color: #FFFFFF;
-            }
-            :any-link {
-                color: #ff4c7a;
-                text-decoration-line: none;
-            }
-            canvas {
-                width: 100%; 
-                height: 100%;
-                overflow: hidden;
-            }
-            .note {
-                font-size: 1.5vh;
-                font-weight: lighter;
-            }
-            .header {
-                position: absolute;
-                top: 0px;
-                width: 100%;
-                padding-top: 3vh;
-                font-size: 1.75vh;
-                text-align: center;
-                z-index: 1;
-            }
-            .footer {
-                position: absolute;
-                bottom: 0px;
-                left: 0%;
-                padding: 1.5vh;
-                font-size: 1.1vh;
-                z-index: 1;
-                width: 100%;
-                box-sizing: border-box;
-                display: flex;
-                justify-content: space-between;
-                gap: 2vh;
-                flex-wrap: wrap;
-                align-items: flex-start;
-            }
-            .footer-section {
-                flex: 1 1 260px;
-            }
-            .footer-left {
-                text-align: left;
-            }
-            .footer-right {
-                text-align: right;
-            }
-            #canvas {
-                height: 100%;
-                width: 100%;
-            }
-            .interval-label {
-                color: #666666;
-                font-size: 1.75vh;
-            }
-            .scale-selector-top {
-                margin-top: 0;
-                margin-bottom: 1vh;
-            }
-            .scale-meta {
-                display: block;
-                font-size: 1.35vh;
-                color: #cccccc;
-                margin-top: 0.4vh;
-            }
-            .scale-meta span {
-                color: #ffffff;
-            }
-            .note-selector {
-                margin-top: 1.5vh;
-                margin-bottom: 1.5vh;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-                gap: 0.8vh;
-                flex-wrap: wrap;
-            }
-            .midi-filter-toggle {
-                display: inline-flex;
-                align-items: center;
-                gap: 0.5vh;
-                font-size: 1.2vh;
-                color: #cccccc;
-                margin-top: 0.5vh;
-            }
-            .midi-btn {
-                background-color: rgba(0, 225, 158, 0.15);
-                border: 1px solid #00e19e;
-                color: #00e19e;
-                padding: 0.4vh 1vh;
-                font-size: 1.3vh;
-                cursor: pointer;
-                border-radius: 4px;
-                transition: all 0.2s;
-            }
-            .midi-btn:hover:not(:disabled) {
-                border-color: #f7d230;
-                color: #f7d230;
-            }
-            .midi-btn:disabled {
-                opacity: 0.5;
-                cursor: default;
-            }
-            .midi-status {
-                color: #cccccc;
-                min-height: 1.8vh;
-                display: inline-block;
-                margin-top: 0.5vh;
-            }
-            .footer-right .midi-status {
-                display: block;
-            }
-            .midi-footer-title {
-                color: #f7d230;
-                font-weight: bold;
-                text-transform: uppercase;
-                letter-spacing: 0.08em;
-            }
-            .midi-footer {
-                line-height: 1.6;
-            }
-            .note-btn {
-                background-color: rgba(255, 255, 255, 0.1);
-                border: 1px solid #00e19e;
-                color: #00e19e;
-                width: 3.6vh;
-                height: 3.6vh;
-                font-size: 1.3vh;
-                cursor: pointer;
-                text-align: center;
-                transition: all 0.2s;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .note-btn:hover {
-                border-color: #f7d230;
-            }
-            .note-btn.active {
-                background-color: #f7d3302d;
-                border-color: #f7d230;
-                font-weight: bold;
-            }
-            .scale-selector {
-                margin-top: 1.5vh;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                gap: 0.8vh;
-                flex-wrap: wrap;
-            }
-            .scale-selector label {
-                font-size: 1.5vh;
-                color: #f7d230;
-            }
-            #scale-select {
-                background-color: #1f262f;
-                border: 1px solid #00e19e;
-                color: #FFFFFF;
-                font-size: 1.4vh;
-                padding: 0.4vh 0.8vh;
-                border-radius: 4px;
-                min-width: 18vh;
-                cursor: pointer;
-            }
-            #scale-select:focus {
-                outline: none;
-                border-color: #f7d230;
-            }
-            .overlay{
-                background-color: #1f262f;
-                /* background-color: #ffffff; */
-                text-align: center;
-                display: table;
-                position:fixed;
-                width:100%;
-                height:100%;
-                top:0px;
-                left:0px;
-                z-index:1000;
-            }
-            #overlay-content {
-                position: absolute;
-                top: 40%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-            }
-            .btn {
-                border: 2px solid #ff4c7a;
-                color: white;
-                background-color: rgba(255, 255, 255, 0);
-                padding: 14px 28px;
-                font-size: 1em;
-                cursor: pointer;
-                text-decoration: none;  
-            }
-            .btn:hover {
-                background-color: rgba(255, 255, 255, .1);
-            }
-        </style>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #FFFFFF;
+        }
 
-        <!-- Add icon library -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        :any-link {
+            color: #ff4c7a;
+            text-decoration-line: none;
+        }
 
-    </head>
-    <body>
-        <div id='overlay' class='overlay'>
-            <div id='overlay-content'><div>
+        canvas {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .note {
+            font-size: 1.5vh;
+            font-weight: lighter;
+        }
+
+        .header {
+            position: absolute;
+            top: 0px;
+            width: 100%;
+            padding-top: 3vh;
+            font-size: 1.75vh;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 0px;
+            left: 0%;
+            padding: 1.5vh;
+            font-size: 1.1vh;
+            z-index: 1;
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            gap: 2vh;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        .footer-section {
+            flex: 1 1 260px;
+        }
+
+        .footer-left {
+            text-align: left;
+        }
+
+        .footer-right {
+            text-align: right;
+        }
+
+        #canvas {
+            height: 100%;
+            width: 100%;
+        }
+
+        .interval-label {
+            color: #666666;
+            font-size: 1.75vh;
+        }
+
+        .scale-selector-top {
+            margin-top: 0;
+            margin-bottom: 1vh;
+        }
+
+        .scale-meta {
+            display: block;
+            font-size: 1.65vh;
+            color: #cccccc;
+            margin-top: 0.4vh;
+        }
+
+        .scale-meta span {
+            color: #ffffff;
+        }
+
+        .note-selector {
+            margin-top: 1.5vh;
+            margin-bottom: 1.5vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 0.8vh;
+            flex-wrap: wrap;
+        }
+
+        .midi-filter-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5vh;
+            font-size: 1.2vh;
+            color: #cccccc;
+            margin-top: 0.5vh;
+        }
+
+        .midi-btn {
+            background-color: rgba(0, 225, 158, 0.15);
+            border: 1px solid #00e19e;
+            color: #00e19e;
+            padding: 0.4vh 1vh;
+            font-size: 1.3vh;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .midi-btn:hover:not(:disabled) {
+            border-color: #f7d230;
+            color: #f7d230;
+        }
+
+        .midi-btn:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        .midi-status {
+            color: #cccccc;
+            min-height: 1.8vh;
+            display: inline-block;
+            margin-top: 0.5vh;
+        }
+
+        .footer-right .midi-status {
+            display: block;
+        }
+
+        .midi-footer-title {
+            color: #f7d230;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .midi-footer {
+            line-height: 1.6;
+        }
+
+        .note-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid #00e19e;
+            color: #00e19e;
+            width: 3.6vh;
+            height: 3.6vh;
+            font-size: 1.3vh;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .note-btn:hover {
+            border-color: #f7d230;
+        }
+
+        .note-btn.active {
+            background-color: #f7d3302d;
+            border-color: #f7d230;
+            font-weight: bold;
+        }
+
+        .scale-selector {
+            margin-top: 1.5vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.8vh;
+            flex-wrap: wrap;
+        }
+
+        .scale-selector label {
+            font-size: 1.5vh;
+            color: #f7d230;
+        }
+
+        #scale-select {
+            background-color: #1f262f;
+            border: 1px solid #00e19e;
+            color: #FFFFFF;
+            font-size: 1.6vh;
+            padding: 0.4vh 0.8vh;
+            border-radius: 4px;
+            min-width: 14vh;
+            cursor: pointer;
+        }
+
+        #scale-select:focus {
+            outline: none;
+            border-color: #f7d230;
+        }
+
+        .overlay {
+            background-color: #1f262f;
+            /* background-color: #ffffff; */
+            text-align: center;
+            display: table;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0px;
+            left: 0px;
+            z-index: 1000;
+        }
+
+        #overlay-content {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .btn {
+            border: 2px solid #ff4c7a;
+            color: white;
+            background-color: rgba(255, 255, 255, 0);
+            padding: 14px 28px;
+            font-size: 1em;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: rgba(255, 255, 255, .1);
+        }
+    </style>
+
+    <!-- Add icon library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+
+<body>
+    <div id='overlay' class='overlay'>
+        <div id='overlay-content'>
+            <div>
                 <h1 style="color: #00e19e">See Scales Plus</h1>
                 <h3>Prozkoumejte a vizualizujte hudební stupnice.</h3><br>
                 <a class="btn" id="ready-btn" href="javascript:void(0)">Spustit</a>
             </div>
         </div>
-        </div>
+    </div>
+    <div class='header'>
         <div class='header'>
-            <div class='header'>
-                <div class='scale-selector scale-selector-top'>
-                    <label for='scale-select'>Stupnice:</label>
-                    <select id='scale-select'></select>
-                </div>
-                <span class='scale-meta'>Kategorie: <span id='category'></span></span>
-                <span class='scale-meta'>Žánry: <span id='genre'></span></span>
-                <span class='scale-meta'>Využití: <span id='usage'></span></span>
-                <div class='note-selector' id='note-selector'></div>
-                </span> 
+            <div class='scale-selector scale-selector-top'>
+                <label for='scale-select'>Stupnice:</label>
+                <select id='scale-select'></select>
+            </div>
+            <span class='scale-meta'><span id='category'></span></span>
+            <span class='scale-meta'>
+                <span id='genre'></span>
+                <span id='usage'></span>
+            </span>
+            <div class='note-selector' id='note-selector'></div>
+            </span>
+        </div>
+    </div>
+    <div id="canvas"></div>
+    <div class='footer'>
+        <div class='footer-section footer-left'>
+            Zobraz: <a href='javascript:void(0)' id='flat'>Béčka</a> / <a href='javascript:void(0)'
+                id='sharp'>Křížky</a><br>
+            Styl intervalů:
+            <span id="interval-styles">
+                <a href='javascript:void(0)' id='arc'>Oblouky</a> /
+                <a href='javascript:void(0)' id='gear'>Ozubené</a> /
+                <a href='javascript:void(0)' id='pie'>Výseče</a>
+            </span>
+            <br><br>
+            <span style='color: #00e19e'>See Scales Plus</span><br>
+            původní autor: Mark Racette<br>
+            kontakt: <a href="mailto:markracette@gmail.com">email</a>
+            sítě:
+            <a href="https://instagram.com/rgb.ig" target="_blank" class="fa fa-instagram"></a>
+            <a href="https://www.twitter.com/markracette" target="_blank" class="fa fa-twitter"></a>
+            <a href="https://www.github.com/mracette" target="_blank" class="fa fa-github"></a>
+            <br>
+            vylepšení: Tomáš Mark + LLM<br>
+            kontakt: <a href="mailto:tomas@digitalspace.name">email</a>
+            sítě:
+            <a href="https://www.github.com/tomasmark79" target="_blank" class="fa fa-github"></a>
+        </div>
+        <div class='footer-section footer-right'>
+            <div class='midi-footer'>
+                <span class='midi-footer-title'>MIDI ovládání</span><br>
+                <button id='midi-btn' class='midi-btn'>Povolit MIDI</button><br>
+                <span id='midi-status' class='midi-status'>Nepřipojeno</span><br>
+                <label class='midi-filter-toggle'>
+                    <input type='checkbox' id='midi-filter' checked>
+                    Hrát jen tóny ve stupnici
+                </label>
             </div>
         </div>
-        <div id="canvas"></div>
-        <div class='footer'>
-            <div class='footer-section footer-left'>
-                Zobraz: <a href='javascript:void(0)' id='flat'>Béčka</a> / <a href='javascript:void(0)' id='sharp'>Křížky</a><br>
-                Styl intervalů:
-                <span id="interval-styles">
-                    <a href='javascript:void(0)' id='arc'>Oblouky</a> /
-                    <a href='javascript:void(0)' id='gear'>Ozubené</a> /
-                    <a href='javascript:void(0)' id='pie'>Výseče</a>
-                </span>
-                <br><br>
-                <span style='color: #00e19e'>See Scales Plus</span><br>
-                původní autor: Mark Racette<br>
-                kontakt: <a href="mailto:markracette@gmail.com">email</a>
-                sítě: 
-                <a href="https://instagram.com/rgb.ig" target="_blank" class="fa fa-instagram"></a>
-                <a href="https://www.twitter.com/markracette" target="_blank" class="fa fa-twitter"></a>
-                <a href="https://www.github.com/mracette" target="_blank" class="fa fa-github"></a>
-                <br>
-                vylepšení: Tomáš Mark + LLM<br>
-                kontakt: <a href="mailto:tomas@digitalspace.name">email</a>
-                sítě: 
-                <a href="https://www.github.com/tomasmark79" target="_blank" class="fa fa-github"></a>
-            </div>
-            <div class='footer-section footer-right'>
-                <div class='midi-footer'>
-                    <span class='midi-footer-title'>MIDI ovládání</span><br>
-                    <button id='midi-btn' class='midi-btn'>Povolit MIDI</button><br>
-                    <span id='midi-status' class='midi-status'>Nepřipojeno</span><br>
-                    <label class='midi-filter-toggle'>
-                        <input type='checkbox' id='midi-filter' checked>
-                        Hrát jen tóny ve stupnici
-                    </label>
-                </div>
-            </div>
-        </div>
-        <script src="./lib/three.min.js"></script>
-        <script src="./lib/tween.js"></script>
-        <script src="./lib/WebGL.js"></script>
-        <script src="./src/scales.js"></script>
-        <script src="./src/keyboard.js"></script>
-        <script src="./index.js"></script>
-	</body>
+    </div>
+    <script src="./lib/three.min.js"></script>
+    <script src="./lib/tween.js"></script>
+    <script src="./lib/WebGL.js"></script>
+    <script src="./src/scales.js"></script>
+    <script src="./src/keyboard.js"></script>
+    <script src="./index.js"></script>
+</body>
+
 </html>
