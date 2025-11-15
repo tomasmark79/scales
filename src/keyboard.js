@@ -19,12 +19,18 @@ function calculateScaleMultiplier() {
 
 // Adjust keyboard position and size based on viewport
 function updateKeyboardPosition() {
+    console.log('updateKeyboardPosition() called');
     const oldScale = currentScaleMultiplier;
     currentScaleMultiplier = calculateScaleMultiplier();
+    console.log('oldScale:', oldScale, 'newScale:', currentScaleMultiplier);
     KEYBOARD_VERTICAL_OFFSET = BASE_VERTICAL_OFFSET;
     
-    // If keyboard exists and scale changed, rebuild it
-    if (keyboardGroup && oldScale !== currentScaleMultiplier) {
+    // Only rebuild if scale changed significantly (more than 1%)
+    const scaleChange = Math.abs(currentScaleMultiplier - oldScale);
+    const threshold = 0.01;
+    
+    if (keyboardGroup && scaleChange > threshold) {
+        console.log('Rebuilding keyboard - scale change:', scaleChange);
         // Remove old keyboard
         scene.remove(keyboardGroup);
         keyboardInteractives = [];
@@ -36,10 +42,13 @@ function updateKeyboardPosition() {
         if (typeof displayKeyboard === 'function' && masterGroup && masterGroup.children.length > 0) {
             displayKeyboard();
         }
+    } else {
+        console.log('Scale change too small, skipping rebuild:', scaleChange);
     }
 }
 
 function buildKeyboard() {
+    console.log('buildKeyboard() called - currentScaleMultiplier:', currentScaleMultiplier);
     keyboardGroup = new THREE.Group();
     let whiteKeyIndices = [0,2,4,5,7,9,11,12,14,16,17,19,21,23];
     
@@ -105,8 +114,7 @@ function buildKeyboard() {
             bkiMesh.userData.noteIndex = keyGroup.userData.index;
             keyboardInteractives.push(bkiMesh);
 
-            // keyGroup.add(bkiMesh, bkoMesh);
-            keyGroup.add(bkiMesh);
+            keyGroup.add(bkiMesh, bkoMesh);
 
             // Position black keys centered around 0 (same offset as white keys)
             keyGroup.position.x = keyboardCenterOffset + whiteKeyThickness / 2 - whiteKeyBorder / 2 + whiteKeyWidth * j;
@@ -141,6 +149,7 @@ function buildKeyboard() {
 initKeyboard();
 
 function initKeyboard() {
+    console.log('initKeyboard() called');
     // Calculate initial scale before building keyboard
     currentScaleMultiplier = calculateScaleMultiplier();
     buildKeyboard();
