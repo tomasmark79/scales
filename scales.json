@@ -1,6 +1,6 @@
 [
     {
-        "name" : "Major",
+        "name" : "Durová",
         "category" : "Běžné",
         "feelings" : "jasný, veselý, nadějný, triumfální",
         "genre" : "pop, folk, klasická hudba",
@@ -10,7 +10,7 @@
         ]
     },
     {
-        "name" : "Aeolian (Natural Minor)",
+        "name" : "Aiolská (Přirozená molová)",
         "category" : "Běžné",
         "feelings" : "melancholický, smutný, introspektivní, tmavý",
         "genre" : "alternativní rock, folk",
@@ -20,7 +20,7 @@
         ]
     },
     {
-        "name" : "Harmonic Minor",
+        "name" : "Harmonická molová",
         "category" : "Běžné",
         "feelings" : "exotický, tmavý, tajemný, vášnivý",
         "genre" : "metal, vážná hudba",
@@ -30,7 +30,7 @@
         ]
     },
     {
-        "name" : "Melodic Minor",
+        "name" : "Melodická molová",
         "category" : "Běžné",
         "feelings" : "melancholický, introspektivní, elegantní, dramatický",
         "genre" : "jazz, filmová hudba",
@@ -40,7 +40,7 @@
         ]
     },
     {
-        "name" : "Harmonic Major",
+        "name" : "Harmonická durová",
         "category" : "Běžné",
         "feelings" : "neobvyklý, exotický, jazzový, sofistikovaný",
         "genre" : "jazz, klasická hudba",
@@ -50,7 +50,7 @@
         ]
     },
     {
-        "name" : "Major Pentatonic",
+        "name" : "Durová pentatonika",
         "category" : "Běžné",
         "feelings" : "teplý, otevřený, klidný, jednoduchý",
         "genre" : "country, gospel",
@@ -60,7 +60,7 @@
         ]
     },
     {
-        "name" : "Minor Pentatonic",
+        "name" : "Molová pentatonika",
         "category" : "Běžné",
         "feelings" : "duševní, bluesový, introspektivní, cool",
         "genre" : "rock, blues",
@@ -70,7 +70,7 @@
         ]
     },
     {
-        "name" : "Egyptian Pentatonic",
+        "name" : "Egyptská pentatonika",
         "category" : "Běžné",
         "feelings" : "mystický, exotický, starobylý, orientální",
         "genre" : "world music, ambient",
@@ -80,7 +80,7 @@
         ]
     },
     {
-        "name" : "Minor Blues",
+        "name" : "Molový blues",
         "category" : "Blues",
         "feelings" : "duševní, surový, emotivní, hrubý",
         "genre" : "blues, rock",
@@ -90,7 +90,7 @@
         ]
     },
     {
-        "name" : "Major Blues",
+        "name" : "Durový blues",
         "category" : "Blues",
         "feelings" : "povznášející, bluesový, radostný, funky",
         "genre" : "swing, soul",
@@ -100,7 +100,7 @@
         ]
     },
     {
-        "name" : "Kansas City Blues",
+        "name" : "Kansas City blues",
         "category" : "Blues",
         "feelings" : "energický, hnací, duševní, silný",
         "genre" : "jump blues, big band",
@@ -110,7 +110,7 @@
         ]
     },
     {
-        "name" : "Dorian",
+        "name" : "Dórská",
         "category" : "Modal",
         "feelings" : "hladký, sofistikovaný, funky, modální",
         "genre" : "funk, fusion",
@@ -120,7 +120,7 @@
         ]
     },
     {
-        "name" : "Phrygian",
+        "name" : "Frygická",
         "category" : "Modal",
         "feelings" : "exotický, tmavý, španělský, tajemný",
         "genre" : "flamenco, progressive metal",
@@ -130,7 +130,7 @@
         ]
     },
     {
-        "name" : "Lydian",
+        "name" : "Lydická",
         "category" : "Modal",
         "feelings" : "jasný, éterický, snový, rozmarný",
         "genre" : "filmové soundtracky, dream pop",
@@ -140,7 +140,7 @@
         ]
     },
     {
-        "name" : "Mixolydian",
+        "name" : "Mixolydická",
         "category" : "Modal",
         "feelings" : "dominantní, groovy, bluesový, rockový",
         "genre" : "rock, funk",
@@ -150,7 +150,7 @@
         ]
     },
     {
-        "name" : "Locrian",
+        "name" : "Lokrická",
         "category" : "Modal",
         "feelings" : "hrozivý, tmavý, napjatý, nestabilní",
         "genre" : "avantgarda, progresivní hudba",
@@ -160,7 +160,7 @@
         ]
     },
     {
-        "name" : "Lydian Dominant",
+        "name" : "Lydická dominantní",
         "category" : "Modal",
         "feelings" : "exotický, jasný, překvapivý, funky",
         "genre" : "fusion, moderní jazz",
@@ -170,7 +170,7 @@
         ]
     },
     {
-        "name" : "Phrygian Dominant",
+        "name" : "Frygická dominantní",
         "category" : "Modal",
         "feelings" : "orientální, dramatický, napjatý, temný",
         "genre" : "metal, flamenco, orientální hudba",
@@ -180,7 +180,7 @@
         ]
     },
     {
-        "name" : "Mixolydian b6",
+        "name" : "Mixolydická b6",
         "category" : "Modal",
         "feelings" : "bluesový, napjatý, jazzový, temný",
         "genre" : "jazz, blues rock",
@@ -190,7 +190,7 @@
         ]
     },
     {
-        "name" : "Dorian b2",
+        "name" : "Dórská b2",
         "category" : "Modal",
         "feelings" : "orientální, tajemný, exotický, sofistikovaný",
         "genre" : "jazz fusion, world music",
@@ -200,7 +200,7 @@
         ]
     },
     {
-        "name" : "Bebop Dominant",
+        "name" : "Bebop dominantní",
         "category" : "Jazzové",
         "feelings" : "swingový, melodický, plynulý, jazzový",
         "genre" : "bebop, swing",
@@ -210,7 +210,7 @@
         ]
     },
     {
-        "name" : "Bebop Major",
+        "name" : "Bebop durová",
         "category" : "Jazzové",
         "feelings" : "živý, swingový, melodický, sofistikovaný",
         "genre" : "bebop, mainstream jazz",
@@ -220,7 +220,7 @@
         ]
     },
     {
-        "name" : "Bebop Minor",
+        "name" : "Bebop molová",
         "category" : "Jazzové",
         "feelings" : "swingový, sofistikovaný, melodický, cool",
         "genre" : "bebop, modern jazz",
@@ -230,7 +230,7 @@
         ]
     },
     {
-        "name" : "Hungarian Minor",
+        "name" : "Maďarská molová",
         "category" : "Exotické",
         "feelings" : "dramatický, napínavý, temný, vášnivý",
         "genre" : "filmová hudba, klasická hudba",
@@ -240,7 +240,7 @@
         ]
     },
     {
-        "name" : "Double Harmonic Major",
+        "name" : "Dvojitá harmonická durová",
         "category" : "Exotické",
         "feelings" : "orientální, mystický, exotický, napjatý",
         "genre" : "byzantská hudba, metal, orientální",
@@ -250,7 +250,7 @@
         ]
     },
     {
-        "name" : "Persian",
+        "name" : "Perská",
         "category" : "Exotické",
         "feelings" : "orientální, mystický, exotický, starobylý",
         "genre" : "perská hudba, world music",
@@ -260,7 +260,7 @@
         ]
     },
     {
-        "name" : "Gypsy Minor",
+        "name" : "Cikánská molová",
         "category" : "Exotické",
         "feelings" : "cigánský, vášnivý, dramatický, temperamentní",
         "genre" : "cikánská hudba, metal, balkanská hudba",
@@ -270,7 +270,7 @@
         ]
     },
     {
-        "name" : "Neapolitan Minor",
+        "name" : "Neapolská molová",
         "category" : "Exotické",
         "feelings" : "dramatický, temný, teatrální, intenzivní",
         "genre" : "klasická hudba, metal, filmová hudba",
@@ -280,7 +280,7 @@
         ]
     },
     {
-        "name" : "Neapolitan Major",
+        "name" : "Neapolská durová",
         "category" : "Exotické",
         "feelings" : "neobvyklý, mystický, dramatický, jemný",
         "genre" : "klasická hudba, filmová hudba",
@@ -290,7 +290,7 @@
         ]
     },
     {
-        "name" : "Jewish (Ahava Raba)",
+        "name" : "Židovská (Ahava Raba)",
         "category" : "Exotické",
         "feelings" : "radostný, náboženský, slavnostní, tradiční",
         "genre" : "klezmer, židovská hudba",
@@ -320,7 +320,7 @@
         ]
     },
     {
-        "name" : "Arabic (Hijaz)",
+        "name" : "Arabská (Hidžáz)",
         "category" : "Exotické",
         "feelings" : "orientální, vášnivý, exotický, mystický",
         "genre" : "arabská hudba, world music",
@@ -330,7 +330,7 @@
         ]
     },
     {
-        "name" : "Spanish 8-Tone",
+        "name" : "Španělská 8-tónová",
         "category" : "Exotické",
         "feelings" : "španělský, vášnivý, dramatický, flamencový",
         "genre" : "flamenco, španělská hudba",
@@ -340,7 +340,7 @@
         ]
     },
     {
-        "name" : "Whole Tone",
+        "name" : "Celotónová",
         "category" : "Neobvyklé",
         "feelings" : "snový, surrealistický, éterický, tajemný",
         "genre" : "impresionismus, ambient",
@@ -350,7 +350,7 @@
         ]
     },
     {
-        "name" : "Diminished",
+        "name" : "Zmenšená",
         "category" : "Neobvyklé",
         "feelings" : "tmavý, hrozivý, znepokojivý, napjatý",
         "genre" : "klasická hudba, hororové soundtracky",
@@ -360,7 +360,7 @@
         ]
     },
     {
-        "name" : "Octatonic",
+        "name" : "Oktatonická",
         "category" : "Neobvyklé",
         "feelings" : "tajemný, tmavý, rytmický, hypnotický",
         "genre" : "film noir, moderní klasická hudba",
@@ -370,7 +370,7 @@
         ]
     },
     {
-        "name" : "Altered",
+        "name" : "Alterovaná",
         "category" : "Neobvyklé",
         "feelings" : "napjatý, disonantní, авангардный, komplexní",
         "genre" : "moderní jazz, fusion",
@@ -380,7 +380,7 @@
         ]
     },
     {
-        "name" : "Chromatic",
+        "name" : "Chromatická",
         "category" : "Neobvyklé",
         "feelings" : "atonální, disonantní, experimentální, znepokojivý",
         "genre" : "avantgarda, filmová hudba",
