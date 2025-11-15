@@ -1511,41 +1511,53 @@ function resumeAudioContextIfNeeded() {
     }
 }
 
-const KEYBOARD_SIZE_MULTIPLIER = 0.7;
+let KEYBOARD_SIZE_MULTIPLIER = 0.7;
 let KEYBOARD_VERTICAL_OFFSET = 6.2;
+const BASE_SIZE_MULTIPLIER = 0.7;
+const BASE_VERTICAL_OFFSET = 6.2;
+let currentScaleMultiplier = 1.0;
 
-// Adjust keyboard position based on viewport
+// Calculate scale multiplier based on viewport
+function calculateScaleMultiplier() {
+    const viewportWidth = window.innerWidth;
+    const minWidth = 320;
+    const maxWidth = 1200;
+    const minScale = 0.75;  // Increased from 0.45 to make piano roll bigger on mobile
+    const maxScale = 1.0;
+    
+    return minScale + (maxScale - minScale) * 
+        Math.min(1, Math.max(0, (viewportWidth - minWidth) / (maxWidth - minWidth)));
+}
+
+// Adjust keyboard position and size based on viewport
 function updateKeyboardPosition() {
-    const aspectRatio = window.innerWidth / window.innerHeight;
+    currentScaleMultiplier = calculateScaleMultiplier();
+    KEYBOARD_VERTICAL_OFFSET = BASE_VERTICAL_OFFSET;
     
-    // On mobile (portrait), move keyboard down more
-    if (aspectRatio < 0.8) {
-        KEYBOARD_VERTICAL_OFFSET = 8.5;
-    } 
-    // On landscape mobile or small screens
-    else if (aspectRatio < 1.2) {
-        KEYBOARD_VERTICAL_OFFSET = 7.5;
-    } 
-    // Desktop
-    else {
-        KEYBOARD_VERTICAL_OFFSET = 6.2;
-    }
-    
+    // If keyboard already exists, update it
     if (keyboardGroup) {
+        keyboardGroup.scale.set(currentScaleMultiplier, currentScaleMultiplier, 1);
         keyboardGroup.position.y = KEYBOARD_VERTICAL_OFFSET;
+        
+        // No need to adjust X position - keys are already centered around 0
+        keyboardGroup.position.x = 0;
+        
+        // Update display if needed
+        if (typeof displayKeyboard === 'function' && masterGroup && masterGroup.children.length > 0) {
+            displayKeyboard();
+        }
     }
 }
 
-initKeyboard();
-
-function initKeyboard() {
-
-    updateKeyboardPosition();
-
+function buildKeyboard() {
     keyboardGroup = new THREE.Group();
     let whiteKeyIndices = [0,2,4,5,7,9,11,12,14,16,17,19,21,23];
-    let whiteKeyThickness = 0.75 * KEYBOARD_SIZE_MULTIPLIER;
+    let whiteKeyThickness = 0.75 * BASE_SIZE_MULTIPLIER;
     let whiteKeyBorder = whiteKeyThickness / 7;
+    let whiteKeyWidth = whiteKeyThickness - whiteKeyBorder;
+
+    // Calculate offset to center the keyboard - 14 keys means 13 intervals
+    const keyboardCenterOffset = -6.5 * whiteKeyWidth; // Half of 13 intervals
 
     for (let i = 0; i < 14; i++) {
         let keyGroup = new THREE.Group();
@@ -1568,14 +1580,14 @@ function initKeyboard() {
         
         keyGroup.add(wkiMesh, wkoMesh);
 
-    keyGroup.translateX((whiteKeyThickness - whiteKeyBorder) * i);
-    keyGroup.translateZ(carouselRadius);
-    keyGroup.translateY(KEYBOARD_VERTICAL_OFFSET);
+        // Position keys centered around 0 (not starting from 0)
+        keyGroup.position.x = keyboardCenterOffset + whiteKeyWidth * i;
+        keyGroup.translateZ(carouselRadius);
 
         keyboardGroup.add(keyGroup);
     }
 
-    let blackKeyThickness = 0.45 * KEYBOARD_SIZE_MULTIPLIER;
+    let blackKeyThickness = 0.45 * BASE_SIZE_MULTIPLIER;
     let blackKeyIndices = [1,3,6,8,10,13,15,18,20,22];
     let blackKeyBorder = blackKeyThickness / 7;
 
@@ -1603,9 +1615,10 @@ function initKeyboard() {
 
             keyGroup.add(bkiMesh, bkoMesh);
 
-            keyGroup.translateX(whiteKeyThickness / 2 - whiteKeyBorder + (whiteKeyThickness - whiteKeyBorder) * j);
+            // Position black keys centered around 0 (same offset as white keys)
+            keyGroup.position.x = keyboardCenterOffset + whiteKeyThickness / 2 - whiteKeyBorder + whiteKeyWidth * j;
             keyGroup.translateZ(carouselRadius + .00001);
-            keyGroup.translateY(KEYBOARD_VERTICAL_OFFSET + (whiteKeyThickness - blackKeyThickness) * 3/2);
+            keyGroup.translateY((whiteKeyThickness - blackKeyThickness) * 3/2);
 
             keyboardGroup.add(keyGroup);
 
@@ -1616,10 +1629,29 @@ function initKeyboard() {
         return a.userData.index - b.userData.index;
     });
 
-    keyboardGroup.translateX(-6.5 * (whiteKeyThickness - whiteKeyBorder));
+    // Apply initial scale
+    keyboardGroup.scale.set(currentScaleMultiplier, currentScaleMultiplier, 1);
+    
+    // No need to adjust group position - keys are already centered around 0
+    keyboardGroup.position.x = 0;
+    
+    // Set initial Y position
+    keyboardGroup.position.y = KEYBOARD_VERTICAL_OFFSET;
 
     scene.add(keyboardGroup);
+    
+    // Update keyboard display if masterGroup exists
+    if (typeof displayKeyboard === 'function' && masterGroup && masterGroup.children.length > 0) {
+        displayKeyboard();
+    }
+}
 
+initKeyboard();
+
+function initKeyboard() {
+    // Calculate initial scale before building keyboard
+    currentScaleMultiplier = calculateScaleMultiplier();
+    buildKeyboard();
 }
 
 function displayKeyboard() {

@@ -5,36 +5,30 @@ const BASE_SIZE_MULTIPLIER = 0.7;
 const BASE_VERTICAL_OFFSET = 6.2;
 let currentScaleMultiplier = 1.0;
 
-// Adjust keyboard position and size based on viewport
-function updateKeyboardPosition() {
+// Calculate scale multiplier based on viewport
+function calculateScaleMultiplier() {
     const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-    const aspectRatio = viewportWidth / viewportHeight;
-    
-    // Calculate scale multiplier smoothly based on width (0.5 at 480px, 1.0 at 1200px+)
     const minWidth = 320;
     const maxWidth = 1200;
-    const minScale = 0.45;
+    const minScale = 0.75;  // Increased from 0.45 to make piano roll bigger on mobile
     const maxScale = 1.0;
     
-    currentScaleMultiplier = minScale + (maxScale - minScale) * 
+    return minScale + (maxScale - minScale) * 
         Math.min(1, Math.max(0, (viewportWidth - minWidth) / (maxWidth - minWidth)));
-    
-    // Keep vertical offset constant - don't adjust it
-    // The perspective will handle the visual positioning
+}
+
+// Adjust keyboard position and size based on viewport
+function updateKeyboardPosition() {
+    currentScaleMultiplier = calculateScaleMultiplier();
     KEYBOARD_VERTICAL_OFFSET = BASE_VERTICAL_OFFSET;
     
-    // If keyboard already exists, just scale it
+    // If keyboard already exists, update it
     if (keyboardGroup) {
         keyboardGroup.scale.set(currentScaleMultiplier, currentScaleMultiplier, 1);
-        // Keep Y position constant
         keyboardGroup.position.y = KEYBOARD_VERTICAL_OFFSET;
         
-        // Compensate X position for scale - divide by scale to keep visual position constant
-        const whiteKeyThickness = 0.75 * BASE_SIZE_MULTIPLIER;
-        const whiteKeyBorder = whiteKeyThickness / 7;
-        const centerOffset = -6.5 * (whiteKeyThickness - whiteKeyBorder);
-        keyboardGroup.position.x = centerOffset / currentScaleMultiplier;
+        // No need to adjust X position - keys are already centered around 0
+        keyboardGroup.position.x = 0;
         
         // Update display if needed
         if (typeof displayKeyboard === 'function' && masterGroup && masterGroup.children.length > 0) {
@@ -48,6 +42,10 @@ function buildKeyboard() {
     let whiteKeyIndices = [0,2,4,5,7,9,11,12,14,16,17,19,21,23];
     let whiteKeyThickness = 0.75 * BASE_SIZE_MULTIPLIER;
     let whiteKeyBorder = whiteKeyThickness / 7;
+    let whiteKeyWidth = whiteKeyThickness - whiteKeyBorder;
+
+    // Calculate offset to center the keyboard - 14 keys means 13 intervals
+    const keyboardCenterOffset = -6.5 * whiteKeyWidth; // Half of 13 intervals
 
     for (let i = 0; i < 14; i++) {
         let keyGroup = new THREE.Group();
@@ -70,8 +68,8 @@ function buildKeyboard() {
         
         keyGroup.add(wkiMesh, wkoMesh);
 
-        // Use position instead of translate for X coordinate
-        keyGroup.position.x = (whiteKeyThickness - whiteKeyBorder) * i;
+        // Position keys centered around 0 (not starting from 0)
+        keyGroup.position.x = keyboardCenterOffset + whiteKeyWidth * i;
         keyGroup.translateZ(carouselRadius);
 
         keyboardGroup.add(keyGroup);
@@ -105,8 +103,8 @@ function buildKeyboard() {
 
             keyGroup.add(bkiMesh, bkoMesh);
 
-            // Use position instead of translate for X coordinate
-            keyGroup.position.x = whiteKeyThickness / 2 - whiteKeyBorder + (whiteKeyThickness - whiteKeyBorder) * j;
+            // Position black keys centered around 0 (same offset as white keys)
+            keyGroup.position.x = keyboardCenterOffset + whiteKeyThickness / 2 - whiteKeyBorder + whiteKeyWidth * j;
             keyGroup.translateZ(carouselRadius + .00001);
             keyGroup.translateY((whiteKeyThickness - blackKeyThickness) * 3/2);
 
@@ -119,9 +117,11 @@ function buildKeyboard() {
         return a.userData.index - b.userData.index;
     });
 
-    // Set horizontal position (use position.x instead of translateX to avoid scale issues)
-    const centerOffset = -6.5 * (whiteKeyThickness - whiteKeyBorder);
-    keyboardGroup.position.x = centerOffset;
+    // Apply initial scale
+    keyboardGroup.scale.set(currentScaleMultiplier, currentScaleMultiplier, 1);
+    
+    // No need to adjust group position - keys are already centered around 0
+    keyboardGroup.position.x = 0;
     
     // Set initial Y position
     keyboardGroup.position.y = KEYBOARD_VERTICAL_OFFSET;
@@ -137,10 +137,9 @@ function buildKeyboard() {
 initKeyboard();
 
 function initKeyboard() {
-
-    updateKeyboardPosition();
+    // Calculate initial scale before building keyboard
+    currentScaleMultiplier = calculateScaleMultiplier();
     buildKeyboard();
-
 }
 
 function displayKeyboard() {
