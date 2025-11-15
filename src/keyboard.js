@@ -10,7 +10,7 @@ function calculateScaleMultiplier() {
     const viewportWidth = window.innerWidth;
     const minWidth = 320;
     const maxWidth = 1200;
-    const minScale = 0.75;  // Increased from 0.45 to make piano roll bigger on mobile
+    const minScale = 0.95;  // Increased from 0.75 to make keyboard bigger on mobile
     const maxScale = 1.0;
     
     return minScale + (maxScale - minScale) * 
