@@ -140,7 +140,7 @@ function buildKeyboard() {
             }));
             
             let bkiMesh = new THREE.Mesh(blackKeyInner, new THREE.MeshBasicMaterial({
-                color: 0x2a3139,
+                color: 0x4a5159,  // Lighter gray for better visibility
                 side: THREE.FrontSide,
                 depthTest: true,
                 depthWrite: true,
@@ -209,7 +209,22 @@ function displayKeyboard() {
         }
         
         if(i < pitchshift || i >= pitchshift + 12 || notes[i - pitchshift] == false) {
-            innerMesh.material.color = new THREE.Color(0x2a3139);
+            // Inactive key - don't change color, keep original (0x1f262f for white, 0x2a3139 for black)
+            // Actually we need to reset to original color in case it was changed
+            let outlineMesh = keys[i].children[0];  // Outline is always at index 0
+            if (outlineMesh && outlineMesh.material) {
+                // Check outline color to determine if it's white or black key
+                if (outlineMesh.material.color.getHex() === 0x666666) {
+                    // It has gray outline, so it's a normal key - check position
+                    // Black keys are at indices 1,3,6,8,10,13,15,18,20,22
+                    const blackKeyIndices = [1,3,6,8,10,13,15,18,20,22];
+                    if (blackKeyIndices.includes(i)) {
+                        innerMesh.material.color = new THREE.Color(0x4a5159);  // Lighter gray for black keys
+                    } else {
+                        innerMesh.material.color = new THREE.Color(0x1f262f);  // White key
+                    }
+                }
+            }
         } else {
 
             //if(isRoot || i === pitchshift + 12) {
@@ -254,7 +269,7 @@ function playKeyboardNote(n) {
         return;
     }
 
-    let originalColor = getKeyBaseColor(n);
+    let originalColor = getKeyBaseColor(n, keyIndex);
 
     // change to white
     key.material.color = new THREE.Color(0xffffff);
@@ -272,8 +287,12 @@ function playKeyboardNote(n) {
 
 }
 
-function getKeyBaseColor(relativeNoteIndex) {
-    const baseColor = new THREE.Color(0x2a3139);  // Default gray for non-scale notes
+function getKeyBaseColor(relativeNoteIndex, keyIndex) {
+    // Determine if it's a black key
+    const blackKeyIndices = [1,3,6,8,10,13,15,18,20,22];
+    const isBlackKey = blackKeyIndices.includes(keyIndex);
+    
+    const baseColor = new THREE.Color(isBlackKey ? 0x4a5159 : 0x1f262f);  // Lighter gray for black keys, dark for white keys
 
     if(!masterGroup || !masterGroup.children.length) {
         return baseColor;
