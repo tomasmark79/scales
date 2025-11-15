@@ -10,7 +10,7 @@ function calculateScaleMultiplier() {
     const viewportWidth = window.innerWidth;
     const minWidth = 320;
     const maxWidth = 1200;
-    const minScale = 0.95;  // Increased from 0.75 to make keyboard bigger on mobile
+    const minScale = 1.2;  // Increased to make keyboard much bigger on mobile
     const maxScale = 1.0;
     
     return minScale + (maxScale - minScale) * 
@@ -113,7 +113,7 @@ function buildKeyboard() {
             // Create visible outline using EdgesGeometry
             let edges = new THREE.EdgesGeometry(blackKeyInner);
             let line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({
-                color: 0x888888,
+                color: 0x666666,  // Darker, subtler outline
                 linewidth: 1
             }));
 
