@@ -103,7 +103,7 @@ function buildKeyboard() {
             let blackKeyInner = new THREE.BoxBufferGeometry(blackKeyThickness - blackKeyBorder, blackKeyThickness * 3 - blackKeyBorder, 0.01);
 
             let bkoMesh = new THREE.Mesh(blackKeyOutline, new THREE.MeshBasicMaterial({
-                color: 0x666666
+                color: 0xaaaaaa  // Lighter gray for better visibility on mobile
             }));
     
             bkoMesh.translateZ(-.0000001);
