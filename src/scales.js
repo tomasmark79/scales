@@ -1140,6 +1140,11 @@ function resize(){
     camera.updateProjectionMatrix();
 
     updateLabelPositions();
+    
+    // Update keyboard position for responsive design
+    if (typeof updateKeyboardPosition === 'function') {
+        updateKeyboardPosition();
+    }
 }
 
 function onMouseMove(event) {

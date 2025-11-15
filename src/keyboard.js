@@ -1,11 +1,54 @@
 
-const KEYBOARD_SIZE_MULTIPLIER = 0.7;
-const KEYBOARD_VERTICAL_OFFSET = 6.2;
+let KEYBOARD_SIZE_MULTIPLIER = 0.7;
+let KEYBOARD_VERTICAL_OFFSET = 6.2;
 
-initKeyboard();
+// Adjust keyboard position and size based on viewport
+function updateKeyboardPosition() {
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const aspectRatio = viewportWidth / viewportHeight;
+    
+    // Adjust size multiplier based on width
+    if (viewportWidth < 480) {
+        KEYBOARD_SIZE_MULTIPLIER = 0.35;
+    } else if (viewportWidth < 768) {
+        KEYBOARD_SIZE_MULTIPLIER = 0.5;
+    } else if (viewportWidth < 1024) {
+        KEYBOARD_SIZE_MULTIPLIER = 0.6;
+    } else {
+        KEYBOARD_SIZE_MULTIPLIER = 0.7;
+    }
+    
+    // Calculate offset more smoothly based on viewport height
+    // Base offset + adjustment based on aspect ratio
+    const baseOffset = 6.2;
+    
+    if (viewportHeight < 600) {
+        // Very small screens
+        KEYBOARD_VERTICAL_OFFSET = baseOffset - 1.5;
+    } else if (viewportHeight < 800) {
+        // Medium screens
+        KEYBOARD_VERTICAL_OFFSET = baseOffset - 1.0;
+    } else if (aspectRatio < 1.0) {
+        // Portrait mode on larger screens
+        KEYBOARD_VERTICAL_OFFSET = baseOffset - 0.5;
+    } else {
+        // Desktop/landscape
+        KEYBOARD_VERTICAL_OFFSET = baseOffset;
+    }
+    
+    // If keyboard already exists, rebuild it with new size
+    if (keyboardGroup) {
+        // Remove old keyboard
+        scene.remove(keyboardGroup);
+        keyboardInteractives.length = 0;
+        
+        // Rebuild with new size
+        buildKeyboard();
+    }
+}
 
-function initKeyboard() {
-
+function buildKeyboard() {
     keyboardGroup = new THREE.Group();
     let whiteKeyIndices = [0,2,4,5,7,9,11,12,14,16,17,19,21,23];
     let whiteKeyThickness = 0.75 * KEYBOARD_SIZE_MULTIPLIER;
@@ -32,9 +75,9 @@ function initKeyboard() {
         
         keyGroup.add(wkiMesh, wkoMesh);
 
-    keyGroup.translateX((whiteKeyThickness - whiteKeyBorder) * i);
-    keyGroup.translateZ(carouselRadius);
-    keyGroup.translateY(KEYBOARD_VERTICAL_OFFSET);
+        keyGroup.translateX((whiteKeyThickness - whiteKeyBorder) * i);
+        keyGroup.translateZ(carouselRadius);
+        keyGroup.translateY(KEYBOARD_VERTICAL_OFFSET);
 
         keyboardGroup.add(keyGroup);
     }
@@ -83,6 +126,19 @@ function initKeyboard() {
     keyboardGroup.translateX(-6.5 * (whiteKeyThickness - whiteKeyBorder));
 
     scene.add(keyboardGroup);
+    
+    // Update keyboard display if masterGroup exists
+    if (typeof displayKeyboard === 'function' && masterGroup && masterGroup.children.length > 0) {
+        displayKeyboard();
+    }
+}
+
+initKeyboard();
+
+function initKeyboard() {
+
+    updateKeyboardPosition();
+    buildKeyboard();
 
 }
 

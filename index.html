@@ -374,6 +374,70 @@
         .btn:hover {
             background-color: rgba(255, 255, 255, .1);
         }
+
+        /* Mobile responsive styles */
+        @media screen and (max-width: 768px) {
+            :root {
+                --ui-font-size: 1.2vh;
+                --footer-clearance: 8vh;
+            }
+
+            .footer {
+                padding: 1vh 1vh;
+                gap: 0.8vh;
+            }
+
+            .footer-info {
+                font-size: calc(var(--ui-font-size) * 0.9);
+                line-height: 1.4;
+            }
+
+            .header {
+                padding-top: 1.5vh;
+            }
+
+            .scale-selector-top {
+                gap: 0.5vh;
+                margin-bottom: 0.5vh;
+            }
+
+            .note-selector {
+                margin-top: 0.8vh;
+                margin-bottom: 0.8vh;
+                gap: 0.5vh;
+            }
+
+            .midi-footer {
+                gap: 0.5vh;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            :root {
+                --ui-font-size: 1vh;
+                --footer-clearance: 10vh;
+            }
+
+            .footer {
+                padding: 0.8vh 0.8vh;
+                gap: 0.6vh;
+            }
+
+            .footer-info br {
+                display: none;
+            }
+
+            .footer-info {
+                font-size: calc(var(--ui-font-size) * 0.85);
+            }
+        }
+
+        /* Portrait mode adjustments */
+        @media screen and (orientation: portrait) and (max-height: 900px) {
+            :root {
+                --footer-clearance: 12vh;
+            }
+        }
     </style>
 
     <!-- Add icon library -->
