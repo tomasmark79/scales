@@ -1543,6 +1543,11 @@ function updateKeyboardPosition() {
         
         // Rebuild with new scale
         buildKeyboard();
+        
+        // Update display to restore colors
+        if (typeof displayKeyboard === 'function' && masterGroup && masterGroup.children.length > 0) {
+            displayKeyboard();
+        }
     }
 }
 
@@ -1627,6 +1632,9 @@ function buildKeyboard() {
     keyboardGroup.children.sort((a, b) => {
         return a.userData.index - b.userData.index;
     });
+
+    // Debug: log number of keys
+    console.log('Keyboard built: ' + keyboardGroup.children.length + ' keys total (14 white + 10 black = 24)');
 
     // Don't apply scale - dimensions are already scaled
     // Just set position
