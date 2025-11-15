@@ -3,7 +3,7 @@ let KEYBOARD_SIZE_MULTIPLIER = 0.7;
 let KEYBOARD_VERTICAL_OFFSET = 6.2;
 const BASE_SIZE_MULTIPLIER = 0.7;
 const BASE_VERTICAL_OFFSET = 6.2;
-const MOBILE_VERTICAL_OFFSET = 3.5;  // Lower position for mobile (smaller number = lower on screen)
+const MOBILE_VERTICAL_OFFSET = 2.5;  // Lower position for mobile (smaller number = lower on screen)
 let currentScaleMultiplier = 1.0;
 
 // Calculate scale multiplier based on viewport
