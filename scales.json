@@ -10,13 +10,13 @@
         ]
     },
     {
-        "name" : "Melodic Minor",
+        "name" : "Aeolian (Natural Minor)",
         "category" : "Běžné",
-        "feelings" : "melancholický, introspektivní, elegantní, dramatický",
-        "genre" : "jazz, filmová hudba",
-        "usage" : "moderní jazzové improvizace, dramatické filmové motivy",
+        "feelings" : "melancholický, smutný, introspektivní, tmavý",
+        "genre" : "alternativní rock, folk",
+        "usage" : "balady, indie folk skladby a melancholické soundtracky",
         "intervals" : [
-            2,1,2,2,2,2,1
+            2,1,2,2,1,2,2
         ]
     },
     {
@@ -27,6 +27,16 @@
         "usage" : "barokní skladby, neoklasický metal a orientální motivy",
         "intervals" : [
             2,1,2,2,1,3,1
+        ]
+    },
+    {
+        "name" : "Melodic Minor",
+        "category" : "Běžné",
+        "feelings" : "melancholický, introspektivní, elegantní, dramatický",
+        "genre" : "jazz, filmová hudba",
+        "usage" : "moderní jazzové improvizace, dramatické filmové motivy",
+        "intervals" : [
+            2,1,2,2,2,2,1
         ]
     },
     {
@@ -110,16 +120,6 @@
         ]
     },
     {
-        "name" : "Lydian Dominant",
-        "category" : "Modal",
-        "feelings" : "exotický, jasný, překvapivý, funky",
-        "genre" : "fusion, moderní jazz",
-        "usage" : "dominantní akordy v jazz fusion, funky improvizace",
-        "intervals" : [
-            2,2,2,1,2,1,2
-        ]
-    },
-    {
         "name" : "Mixolydian",
         "category" : "Modal",
         "feelings" : "dominantní, groovy, bluesový, rockový",
@@ -127,16 +127,6 @@
         "usage" : "dominantní akordy v rock'n'rollu, funkové jamy a jam bandy",
         "intervals" : [
             2,2,1,2,2,1,2
-        ]
-    },
-    {
-        "name" : "Aeolian (Natural Minor)",
-        "category" : "Modal",
-        "feelings" : "melancholický, smutný, introspektivní, tmavý",
-        "genre" : "alternativní rock, folk",
-        "usage" : "balady, indie folk skladby a melancholické soundtracky",
-        "intervals" : [
-            2,1,2,2,1,2,2
         ]
     },
     {
@@ -150,23 +140,103 @@
         ]
     },
     {
-        "name" : "Phrygian",
+        "name" : "Lydian Dominant",
         "category" : "Modal",
-        "feelings" : "exotický, tmavý, španělský, tajemný",
-        "genre" : "flamenco, progressive metal",
-        "usage" : "španělská kytarová sólo, metalové riffy se španělskou náladou",
+        "feelings" : "exotický, jasný, překvapivý, funky",
+        "genre" : "fusion, moderní jazz",
+        "usage" : "dominantní akordy v jazz fusion, funky improvizace",
         "intervals" : [
-            1,2,2,2,1,2,2
+            2,2,2,1,2,1,2
         ]
     },
     {
-        "name" : "Chromatic",
-        "category" : "Neobvyklé",
-        "feelings" : "atonální, disonantní, experimentální, znepokojivý",
-        "genre" : "avantgarda, filmová hudba",
-        "usage" : "napětí ve filmové hudbě, moderní klasika",
+        "name" : "Phrygian Dominant",
+        "category" : "Modal",
+        "feelings" : "orientální, dramatický, napjatý, temný",
+        "genre" : "metal, flamenco, orientální hudba",
+        "usage" : "metalové riffy, španělské flamenco, blízkovýchodní melodie",
         "intervals" : [
-            1,1,1,1,1,1,1,1,1,1,1,1
+            1,3,1,2,1,2,2
+        ]
+    },
+    {
+        "name" : "Bebop Dominant",
+        "category" : "Jazzové",
+        "feelings" : "swingový, melodický, plynulý, jazzový",
+        "genre" : "bebop, swing",
+        "usage" : "jazzové improvizace přes dominantní akordy, bebop linky",
+        "intervals" : [
+            2,2,1,2,2,1,1,1
+        ]
+    },
+    {
+        "name" : "Bebop Major",
+        "category" : "Jazzové",
+        "feelings" : "živý, swingový, melodický, sofistikovaný",
+        "genre" : "bebop, mainstream jazz",
+        "usage" : "improvizace přes durové akordy, rychlé jazzové pasáže",
+        "intervals" : [
+            2,2,1,2,1,1,2,1
+        ]
+    },
+    {
+        "name" : "Hungarian Minor",
+        "category" : "Exotické",
+        "feelings" : "dramatický, napínavý, temný, vášnivý",
+        "genre" : "filmová hudba, klasická hudba",
+        "usage" : "dramatické filmové soundtracky, romantická klasická hudba",
+        "intervals" : [
+            2,1,3,1,1,3,1
+        ]
+    },
+    {
+        "name" : "Double Harmonic Major",
+        "category" : "Exotické",
+        "feelings" : "orientální, mystický, exotický, napjatý",
+        "genre" : "byzantská hudba, metal, orientální",
+        "usage" : "blízkovýchodní melodie, progresivní metal, mystické pasáže",
+        "intervals" : [
+            1,3,1,2,1,3,1
+        ]
+    },
+    {
+        "name" : "Hirajoshi",
+        "category" : "Exotické",
+        "feelings" : "japonský, klidný, meditativní, minimalistický",
+        "genre" : "japonská hudba, ambient",
+        "usage" : "tradiční japonské melodie, meditativní hudba",
+        "intervals" : [
+            2,1,4,1,4
+        ]
+    },
+    {
+        "name" : "In Sen",
+        "category" : "Exotické",
+        "feelings" : "japonský, temný, mystický, kontemplativní",
+        "genre" : "japonská hudba, world music",
+        "usage" : "tradiční japonské skladby, world music projekty",
+        "intervals" : [
+            1,4,2,1,4
+        ]
+    },
+    {
+        "name" : "Arabic (Hijaz)",
+        "category" : "Exotické",
+        "feelings" : "orientální, vášnivý, exotický, mystický",
+        "genre" : "arabská hudba, world music",
+        "usage" : "blízkovýchodní melodie, orientální improvizace",
+        "intervals" : [
+            1,3,1,2,1,2,2
+        ]
+    },
+    {
+        "name" : "Spanish 8-Tone",
+        "category" : "Exotické",
+        "feelings" : "španělský, vášnivý, dramatický, flamencový",
+        "genre" : "flamenco, španělská hudba",
+        "usage" : "flamencové improvizace, španělská kytarová hudba",
+        "intervals" : [
+            1,2,1,1,1,2,2,2
         ]
     },
     {
@@ -180,13 +250,13 @@
         ]
     },
     {
-        "name" : "Altered",
+        "name" : "Diminished",
         "category" : "Neobvyklé",
-        "feelings" : "napjatý, disonantní, авангардный, komplexní",
-        "genre" : "moderní jazz, fusion",
-        "usage" : "alterované dominantní akordy v jazzu, napětí ve fusion sólech",
+        "feelings" : "tmavý, hrozivý, znepokojivý, napjatý",
+        "genre" : "klasická hudba, hororové soundtracky",
+        "usage" : "napětí v klasických skladbách, hororové efekty",
         "intervals" : [
-            1,2,1,2,2,2,2
+            1,2,1,2,1,2,1,2
         ]
     },
     {
@@ -200,13 +270,23 @@
         ]
     },
     {
-        "name" : "Diminished",
+        "name" : "Altered",
         "category" : "Neobvyklé",
-        "feelings" : "tmavý, hrozivý, znepokojivý, napjatý",
-        "genre" : "klasická hudba, hororové soundtracky",
-        "usage" : "napětí v klasických skladbách, hororové efekty",
+        "feelings" : "napjatý, disonantní, авангардный, komplexní",
+        "genre" : "moderní jazz, fusion",
+        "usage" : "alterované dominantní akordy v jazzu, napětí ve fusion sólech",
         "intervals" : [
-            1,2,1,2,1,2,1,2
+            1,2,1,2,2,2,2
+        ]
+    },
+    {
+        "name" : "Chromatic",
+        "category" : "Neobvyklé",
+        "feelings" : "atonální, disonantní, experimentální, znepokojivý",
+        "genre" : "avantgarda, filmová hudba",
+        "usage" : "napětí ve filmové hudbě, moderní klasika",
+        "intervals" : [
+            1,1,1,1,1,1,1,1,1,1,1,1
         ]
     }
 ]
