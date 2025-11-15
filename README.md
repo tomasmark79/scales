@@ -1,17 +1,19 @@
 # See Scales Plus
 
-Vylepšená vizualizace hudebních stupnic
+Vylepšená vizualizace hudebních stupnic přeloežená do češtiny.
 
-- přidaná tlačítka pro přímý výběr základního tónu
-- přidaný výběr stupnic
-- přidáno více stupnic a temperovaných ladění
+Oproti původní verzi obsahuje tyto nové funkce:
+
+- český překlad uživatelského rozhraní
+- přidaný výběr stupnic pomocí selektoru (šipky nahoru/dolů)
+- přidána tlačítka pro přímý výběr základního tónu
+- přidána nálada
 - přidán hratelný pianoroll
 - přidána podpora MIDI vstupu
 
 
-Vylepšená verze online:
-
-**Původní autor – živá ukázka**: (https://mracette.github.io/scales)
+**Vylepšená verze online:** (https://tomasmark79.github.io/scales/)  
+Původní autor – živá ukázka: (https://mracette.github.io/scales)
 
 ## Přehled
 

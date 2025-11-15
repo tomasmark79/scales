@@ -53,11 +53,14 @@
             #name {
                 font-size: 4vh;
             }
-            #root-note {
-                color: #ff4c7a;
-            }
-            .category {
+            .scale-meta {
                 display: block;
+                font-size: 1.35vh;
+                color: #cccccc;
+                margin-top: 0.4vh;
+            }
+            .scale-meta span {
+                color: #ffffff;
             }
             .note-selector {
                 margin-top: 1.5vh;
@@ -111,19 +114,22 @@
                 background-color: rgba(255, 255, 255, 0.1);
                 border: 1px solid #00e19e;
                 color: #00e19e;
-                padding: 0.3vh 0.6vh;
+                width: 3.6vh;
+                height: 3.6vh;
                 font-size: 1.3vh;
                 cursor: pointer;
-                min-width: 2.5vh;
                 text-align: center;
                 transition: all 0.2s;
-                border-radius: 2px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
             .note-btn:hover {
                 border-color: #f7d230;
             }
             .note-btn.active {
-                background-color: #f7d230;
+                background-color: #f7d3302d;
                 border-color: #f7d230;
                 font-weight: bold;
             }
@@ -201,8 +207,9 @@
         <div class='header'>
             <div class='header'>
                 <span id='name'></span>
-                <span class = 'category'><br>
-                    Kategorie: <span id='category'></span><br>
+                <span class='scale-meta'>Kategorie: <span id='category'></span></span>
+                <span class='scale-meta'>Žánry: <span id='genre'></span></span>
+                <span class='scale-meta'>Využití: <span id='usage'></span></span>
                     <div class='scale-selector'>
                         <label for='scale-select'>Stupnice:</label>
                         <select id='scale-select'></select>
@@ -230,14 +237,14 @@
             </span>
             <br><br>
             <span style='color: #00e19e'>See Scales Plus</span><br>
-            autor: Mark Racette<br>
+            původní autor: Mark Racette<br>
             kontakt: <a href="mailto:markracette@gmail.com">email</a>
             sítě: 
             <a href="https://instagram.com/rgb.ig" target="_blank" class="fa fa-instagram"></a>
             <a href="https://www.twitter.com/markracette" target="_blank" class="fa fa-twitter"></a>
             <a href="https://www.github.com/mracette" target="_blank" class="fa fa-github"></a>
             <br>
-            autor: Tomáš Mark + LLM<br>
+            vylepšení: Tomáš Mark + LLM<br>
             kontakt: <a href="mailto:tomas@digitalspace.name">email</a>
             sítě: 
             <a href="https://www.github.com/tomasmark79" target="_blank" class="fa fa-github"></a>

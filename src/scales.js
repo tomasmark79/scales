@@ -29,7 +29,9 @@ let noteLabels = {
 let pageElements = {
     name: null,
     category: null,
-    description: null
+    description: null,
+    genre: null,
+    usage: null
 }
 let midiAccess = null;
 let midiEnabled = false;
@@ -157,6 +159,19 @@ function createNoteSelector() {
     });
 }
 
+function buildScaleOptionLabel(scale) {
+    const category = scale.category || 'Neznámá kategorie';
+    const genre = scale.genre || 'Žánr neuveden';
+    return `${scale.name} — ${category} · ${genre}`;
+}
+
+function buildScaleOptionTooltip(scale) {
+    const category = scale.category || 'Neznámá kategorie';
+    const genre = scale.genre || 'Žánr neuveden';
+    const usage = scale.usage || 'Využití neuvedeno';
+    return `${scale.name} — ${category} · Žánr: ${genre} · Využití: ${usage}`;
+}
+
 function createScaleSelector(scaleData = []) {
     const selectEl = document.getElementById('scale-select');
     if (!selectEl) {
@@ -168,7 +183,9 @@ function createScaleSelector(scaleData = []) {
     scaleData.forEach((scale, index) => {
         const option = document.createElement('option');
         option.value = index;
-        option.textContent = scale.name;
+        const label = buildScaleOptionLabel(scale);
+        option.textContent = label;
+        option.title = buildScaleOptionTooltip(scale);
         selectEl.appendChild(option);
     });
 
@@ -374,6 +391,8 @@ function visualize(data){
                 scaleGroup.userData.name = data[i].name;
                 scaleGroup.userData.category = data[i].category;
                 scaleGroup.userData.feelings = data[i].feelings;
+                scaleGroup.userData.genre = data[i].genre || '';
+                scaleGroup.userData.usage = data[i].usage || '';
 
                 categoryList.push(data[i].category);
                 
@@ -558,6 +577,14 @@ function updateLabels(notes, timeout) {
         document.getElementById('name').innerText = data.name + ` (${noteCount})`;
         document.getElementById('category').innerText = data.category + ' · ' + data.feelings;
         document.getElementById('category').style.color = '#ff4c7a';
+        const genreEl = document.getElementById('genre');
+        if (genreEl) {
+            genreEl.innerText = data.genre || '—';
+        }
+        const usageEl = document.getElementById('usage');
+        if (usageEl) {
+            usageEl.innerText = data.usage || '—';
+        }
 
         for(let i = 0; i < noteLabels.elements.length; i++) {
             if(!notes[i]) {
