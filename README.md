@@ -1,19 +1,26 @@
-# See Scales by DotName
+# See Scales Plus
 
-Improved musical scale visualization with MIDI input support and more.
+Vylepšená vizualizace hudebních stupnic
 
-My Imroved Version Live:
+- přidaná tlačítka pro přímý výběr základního tónu
+- přidaný výběr stupnic
+- přidáno více stupnic a temperovaných ladění
+- přidán hratelný pianoroll
+- přidána podpora MIDI vstupu
 
-**Original Author View Live**: (https://mracette.github.io/scales)
 
-## Overview
+Vylepšená verze online:
 
-Visualize and explore musical scales using this interactive web tool. Built with JS/THREE.js/WebAudio.
+**Původní autor – živá ukázka**: (https://mracette.github.io/scales)
+
+## Přehled
+
+Vizualizujte a objevujte hudební stupnice pomocí tohoto interaktivního webového nástroje. Postaveno na JS/THREE.js/WebAudio.
 
 ![Screenshot](./screenshots/img1.png "See Scales")
 
-## MIDI Input
+## MIDI vstup
 
-Connect a USB or Bluetooth MIDI controller and click **Enable MIDI** in the app header to let your browser stream note data into See Scales Plus. When Web MIDI is available (Chrome, Edge, and other Chromium-based browsers), the app will listen to every connected input and reuse the built-in audio samples so you hear the same timbres as when you click the on-screen keyboard.
+Připojte USB nebo Bluetooth MIDI kontroler a klikněte na **Povolit MIDI** v záhlaví aplikace – prohlížeč pak bude posílat notová data do See Scales Plus. Pokud váš prohlížeč podporuje Web MIDI (Chrome, Edge a další prohlížeče založené na Chromiu), aplikace naslouchá všem připojeným vstupům a používá stejné vestavěné audio samply jako při kliknutí na virtuální klaviaturu.
 
-If your browser does not expose the Web MIDI API, the button will be disabled and a short status message will explain the limitation. You can still interact with the visual keyboard and mouse controls.
+Když prohlížeč Web MIDI API neposkytuje, tlačítko se deaktivuje a krátká zpráva vysvětlí omezení. Vizualizovanou klaviaturu i ovládání myší však můžete používat dál.

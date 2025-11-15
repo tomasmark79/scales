@@ -1122,8 +1122,8 @@ function setupMIDISupport() {
 
     if (!navigator.requestMIDIAccess) {
         midiButtonEl.disabled = true;
-        midiButtonEl.innerText = 'MIDI unsupported';
-        midiStatusEl.innerText = 'Web MIDI API is not available in this browser.';
+        midiButtonEl.innerText = 'MIDI není podporováno';
+        midiStatusEl.innerText = 'Prohlížeč nepodporuje Web MIDI API.';
         return;
     }
 
@@ -1143,9 +1143,9 @@ function requestMIDIAccess() {
 
     if (midiButtonEl) {
         midiButtonEl.disabled = true;
-        midiButtonEl.innerText = 'Connecting…';
+        midiButtonEl.innerText = 'Připojuji…';
     }
-    updateMIDIStatus('Requesting access to MIDI devices…');
+    updateMIDIStatus('Žádám o přístup k MIDI zařízením…');
 
     navigator.requestMIDIAccess({sysex: false}).then(onMIDISuccess, onMIDIFailure);
 }
@@ -1161,7 +1161,7 @@ function onMIDISuccess(access) {
 
     if (midiButtonEl) {
         midiButtonEl.disabled = false;
-        midiButtonEl.innerText = 'Refresh MIDI';
+        midiButtonEl.innerText = 'Znovu načíst MIDI';
     }
 
     updateMIDIStatus();
@@ -1169,13 +1169,13 @@ function onMIDISuccess(access) {
 }
 
 function onMIDIFailure(err) {
-    console.error('Unable to access MIDI devices', err);
+    console.error('Nelze získat přístup k MIDI zařízením', err);
     midiEnabled = false;
     if (midiButtonEl) {
         midiButtonEl.disabled = false;
-        midiButtonEl.innerText = 'Enable MIDI';
+        midiButtonEl.innerText = 'Povolit MIDI';
     }
-    updateMIDIStatus('Failed to access MIDI devices. Check browser permissions.');
+    updateMIDIStatus('Nepodařilo se získat přístup k MIDI zařízením. Zkontrolujte oprávnění prohlížeče.');
 }
 
 function handleMIDIStateChange(event) {
@@ -1235,17 +1235,17 @@ function updateMIDIStatus(message) {
     }
 
     if (!midiEnabled) {
-        midiStatusEl.innerText = 'Not connected';
+        midiStatusEl.innerText = 'Nepřipojeno';
         return;
     }
 
     if (!midiInputs.size) {
-        midiStatusEl.innerText = 'No MIDI devices detected.';
+        midiStatusEl.innerText = 'Nebyla zjištěna žádná MIDI zařízení.';
         return;
     }
 
-    let names = Array.from(midiInputs.values()).map((input) => input.name || 'Unknown device');
-    midiStatusEl.innerText = `Listening: ${names.join(', ')}`;
+    let names = Array.from(midiInputs.values()).map((input) => input.name || 'Neznámé zařízení');
+    midiStatusEl.innerText = `Naslouchám: ${names.join(', ')}`;
 }
 
 function handleMIDIMessage(message) {

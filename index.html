@@ -3,7 +3,7 @@
 	<head>
         <meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-        <title>See Scales Plus</title>
+    <title>See Scales Plus – vizualizace stupnic</title>
         <style>
             body {
                 margin: 0;
@@ -39,7 +39,7 @@
                 left: 0%;
                 padding: 1.5vh;
                 text-align: left;
-                font-size: 1.75vh;
+                font-size: 1.1vh;
                 z-index: 1;
             }
             #canvas {
@@ -186,8 +186,8 @@
         <div id='overlay' class='overlay'>
             <div id='overlay-content'><div>
                 <h1 style="color: #00e19e">See Scales Plus</h1>
-                <h3>Explore and visualize musical scales.</h3><br>
-                <a class="btn" id="ready-btn" href="javascript:void(0)">Push to Start</a>
+                <h3>Prozkoumejte a vizualizujte hudební stupnice.</h3><br>
+                <a class="btn" id="ready-btn" href="javascript:void(0)">Spustit</a>
             </div>
         </div>
         </div>
@@ -195,40 +195,40 @@
             <div class='header'>
                 <span id='name'></span>
                 <span class = 'category'><br>
-                    Category: <span id='category'></span><br>
+                    Kategorie: <span id='category'></span><br>
                     <div class='scale-selector'>
-                        <label for='scale-select'>Scale:</label>
+                        <label for='scale-select'>Stupnice:</label>
                         <select id='scale-select'></select>
                     </div>
                     <div class='note-selector' id='note-selector'></div>
                     <div class='midi-controls'>
-                        <button id='midi-btn' class='midi-btn'>Enable MIDI</button>
-                        <span id='midi-status' class='midi-status'>Not connected</span>
+                        <button id='midi-btn' class='midi-btn'>Povolit MIDI</button>
+                        <span id='midi-status' class='midi-status'>Nepřipojeno</span>
                     </div>
                 </span> 
             </div>
         </div>
         <div id="canvas"></div>
         <div class='footer'>
-            Show: <a href='javascript:void(0)' id='flat'>Flats</a> / <a href='javascript:void(0)' id='sharp'>Sharps</a><br>
-            Interval Style:
+            Zobraz: <a href='javascript:void(0)' id='flat'>Béčka</a> / <a href='javascript:void(0)' id='sharp'>Křížky</a><br>
+            Styl intervalů:
             <span id="interval-styles">
-                <a href='javascript:void(0)' id='arc'>Arcs</a> /
-                <a href='javascript:void(0)' id='gear'>Gear</a> /
-                <a href='javascript:void(0)' id='pie'>Wedges</a>
+                <a href='javascript:void(0)' id='arc'>Oblouky</a> /
+                <a href='javascript:void(0)' id='gear'>Ozubené</a> /
+                <a href='javascript:void(0)' id='pie'>Výseče</a>
             </span>
             <br><br>
             <span style='color: #00e19e'>See Scales Plus</span><br>
-            by Mark Racette<br>
-            connect: <a href="mailto:markracette@gmail.com">email</a>
-            social: 
+            autor: Mark Racette<br>
+            kontakt: <a href="mailto:markracette@gmail.com">email</a>
+            sítě: 
             <a href="https://instagram.com/rgb.ig" target="_blank" class="fa fa-instagram"></a>
             <a href="https://www.twitter.com/markracette" target="_blank" class="fa fa-twitter"></a>
             <a href="https://www.github.com/mracette" target="_blank" class="fa fa-github"></a>
             <br>
-            by Mark Racette<br>
-            connect: <a href="mailto:tomas@digitalspace.name">email</a>
-            social: 
+            autor: Tomáš Mark + LLM<br>
+            kontakt: <a href="mailto:tomas@digitalspace.name">email</a>
+            sítě: 
             <a href="https://www.github.com/tomasmark79" target="_blank" class="fa fa-github"></a>
         </div>
         <script src="./lib/three.min.js"></script>
