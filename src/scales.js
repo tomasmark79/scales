@@ -126,8 +126,6 @@ function initDocument() {
       }
     }
 
-    document.getElementById('name').style.color = green;
-
     // Create note selector buttons
     createNoteSelector();
 
@@ -159,17 +157,36 @@ function createNoteSelector() {
     });
 }
 
+function getScaleNoteCount(scale) {
+    if (scale && Array.isArray(scale.intervals) && scale.intervals.length > 0) {
+        return scale.intervals.length;
+    }
+    if (scale && Array.isArray(scale.notes) && scale.notes.length > 0) {
+        return scale.notes.length;
+    }
+    return null;
+}
+
+function formatToneCount(count) {
+    if (!Number.isFinite(count) || count <= 0) {
+        return 'neznámý počet tónů';
+    }
+    if (count === 1) {
+        return '1 tón';
+    }
+    if (count >= 2 && count <= 4) {
+        return `${count} tóny`;
+    }
+    return `${count} tónů`;
+}
+
 function buildScaleOptionLabel(scale) {
-    const category = scale.category || 'Neznámá kategorie';
-    const genre = scale.genre || 'Žánr neuveden';
-    return `${scale.name} — ${category} · ${genre}`;
+    const count = getScaleNoteCount(scale);
+    return `${scale.name} — ${formatToneCount(count)}`;
 }
 
 function buildScaleOptionTooltip(scale) {
-    const category = scale.category || 'Neznámá kategorie';
-    const genre = scale.genre || 'Žánr neuveden';
-    const usage = scale.usage || 'Využití neuvedeno';
-    return `${scale.name} — ${category} · Žánr: ${genre} · Využití: ${usage}`;
+    return buildScaleOptionLabel(scale);
 }
 
 function createScaleSelector(scaleData = []) {
@@ -572,9 +589,6 @@ function updateLabels(notes, timeout) {
         // update the title, category, and description
         let data = masterGroup.children[scaleshift].userData;
 
-        let noteCount = data.notes.filter((e) => {return e==true;}).length;
-
-        document.getElementById('name').innerText = data.name + ` (${noteCount})`;
         document.getElementById('category').innerText = data.category + ' · ' + data.feelings;
         document.getElementById('category').style.color = '#ff4c7a';
         const genreEl = document.getElementById('genre');

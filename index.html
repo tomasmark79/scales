@@ -38,9 +38,24 @@
                 bottom: 0px;
                 left: 0%;
                 padding: 1.5vh;
-                text-align: left;
                 font-size: 1.1vh;
                 z-index: 1;
+                width: 100%;
+                box-sizing: border-box;
+                display: flex;
+                justify-content: space-between;
+                gap: 2vh;
+                flex-wrap: wrap;
+                align-items: flex-start;
+            }
+            .footer-section {
+                flex: 1 1 260px;
+            }
+            .footer-left {
+                text-align: left;
+            }
+            .footer-right {
+                text-align: right;
             }
             #canvas {
                 height: 100%;
@@ -50,8 +65,9 @@
                 color: #666666;
                 font-size: 1.75vh;
             }
-            #name {
-                font-size: 4vh;
+            .scale-selector-top {
+                margin-top: 0;
+                margin-bottom: 1vh;
             }
             .scale-meta {
                 display: block;
@@ -72,21 +88,13 @@
                 gap: 0.8vh;
                 flex-wrap: wrap;
             }
-            .midi-controls {
-                margin-top: 1vh;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                gap: 1vh;
-                flex-wrap: wrap;
-                font-size: 1.4vh;
-            }
             .midi-filter-toggle {
-                display: flex;
+                display: inline-flex;
                 align-items: center;
                 gap: 0.5vh;
                 font-size: 1.2vh;
                 color: #cccccc;
+                margin-top: 0.5vh;
             }
             .midi-btn {
                 background-color: rgba(0, 225, 158, 0.15);
@@ -109,6 +117,20 @@
             .midi-status {
                 color: #cccccc;
                 min-height: 1.8vh;
+                display: inline-block;
+                margin-top: 0.5vh;
+            }
+            .footer-right .midi-status {
+                display: block;
+            }
+            .midi-footer-title {
+                color: #f7d230;
+                font-weight: bold;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+            }
+            .midi-footer {
+                line-height: 1.6;
             }
             .note-btn {
                 background-color: rgba(255, 255, 255, 0.1);
@@ -206,48 +228,52 @@
         </div>
         <div class='header'>
             <div class='header'>
-                <span id='name'></span>
+                <div class='scale-selector scale-selector-top'>
+                    <label for='scale-select'>Stupnice:</label>
+                    <select id='scale-select'></select>
+                </div>
                 <span class='scale-meta'>Kategorie: <span id='category'></span></span>
                 <span class='scale-meta'>Žánry: <span id='genre'></span></span>
                 <span class='scale-meta'>Využití: <span id='usage'></span></span>
-                    <div class='scale-selector'>
-                        <label for='scale-select'>Stupnice:</label>
-                        <select id='scale-select'></select>
-                    </div>
-                    <div class='note-selector' id='note-selector'></div>
-                    <div class='midi-controls'>
-                        <button id='midi-btn' class='midi-btn'>Povolit MIDI</button>
-                        <span id='midi-status' class='midi-status'>Nepřipojeno</span>
-                        <label class='midi-filter-toggle'>
-                            <input type='checkbox' id='midi-filter' checked>
-                            Hrát jen tóny ve stupnici
-                        </label>
-                    </div>
+                <div class='note-selector' id='note-selector'></div>
                 </span> 
             </div>
         </div>
         <div id="canvas"></div>
         <div class='footer'>
-            Zobraz: <a href='javascript:void(0)' id='flat'>Béčka</a> / <a href='javascript:void(0)' id='sharp'>Křížky</a><br>
-            Styl intervalů:
-            <span id="interval-styles">
-                <a href='javascript:void(0)' id='arc'>Oblouky</a> /
-                <a href='javascript:void(0)' id='gear'>Ozubené</a> /
-                <a href='javascript:void(0)' id='pie'>Výseče</a>
-            </span>
-            <br><br>
-            <span style='color: #00e19e'>See Scales Plus</span><br>
-            původní autor: Mark Racette<br>
-            kontakt: <a href="mailto:markracette@gmail.com">email</a>
-            sítě: 
-            <a href="https://instagram.com/rgb.ig" target="_blank" class="fa fa-instagram"></a>
-            <a href="https://www.twitter.com/markracette" target="_blank" class="fa fa-twitter"></a>
-            <a href="https://www.github.com/mracette" target="_blank" class="fa fa-github"></a>
-            <br>
-            vylepšení: Tomáš Mark + LLM<br>
-            kontakt: <a href="mailto:tomas@digitalspace.name">email</a>
-            sítě: 
-            <a href="https://www.github.com/tomasmark79" target="_blank" class="fa fa-github"></a>
+            <div class='footer-section footer-left'>
+                Zobraz: <a href='javascript:void(0)' id='flat'>Béčka</a> / <a href='javascript:void(0)' id='sharp'>Křížky</a><br>
+                Styl intervalů:
+                <span id="interval-styles">
+                    <a href='javascript:void(0)' id='arc'>Oblouky</a> /
+                    <a href='javascript:void(0)' id='gear'>Ozubené</a> /
+                    <a href='javascript:void(0)' id='pie'>Výseče</a>
+                </span>
+                <br><br>
+                <span style='color: #00e19e'>See Scales Plus</span><br>
+                původní autor: Mark Racette<br>
+                kontakt: <a href="mailto:markracette@gmail.com">email</a>
+                sítě: 
+                <a href="https://instagram.com/rgb.ig" target="_blank" class="fa fa-instagram"></a>
+                <a href="https://www.twitter.com/markracette" target="_blank" class="fa fa-twitter"></a>
+                <a href="https://www.github.com/mracette" target="_blank" class="fa fa-github"></a>
+                <br>
+                vylepšení: Tomáš Mark + LLM<br>
+                kontakt: <a href="mailto:tomas@digitalspace.name">email</a>
+                sítě: 
+                <a href="https://www.github.com/tomasmark79" target="_blank" class="fa fa-github"></a>
+            </div>
+            <div class='footer-section footer-right'>
+                <div class='midi-footer'>
+                    <span class='midi-footer-title'>MIDI ovládání</span><br>
+                    <button id='midi-btn' class='midi-btn'>Povolit MIDI</button><br>
+                    <span id='midi-status' class='midi-status'>Nepřipojeno</span><br>
+                    <label class='midi-filter-toggle'>
+                        <input type='checkbox' id='midi-filter' checked>
+                        Hrát jen tóny ve stupnici
+                    </label>
+                </div>
+            </div>
         </div>
         <script src="./lib/three.min.js"></script>
         <script src="./lib/tween.js"></script>
