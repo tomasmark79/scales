@@ -5,13 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <title>See Scales Plus – vizualizace stupnic</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%231f262f' stroke='%2300e19e' stroke-width='4'/%3E%3Cpath d='M24 18v24a6 6 0 1 0 4 5.66V26h12v12a6 6 0 1 0 4 5.66V18H24z' fill='%23ffd830'/%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%231f262f' stroke='%2300e19e' stroke-width='4'/%3E%3Cpath d='M24 18v24a6 6 0 1 0 4 5.66V26h12v12a6 6 0 1 0 4 5.66V18H24z' fill='%23ffd830'/%3E%3C/svg%3E">
     <style>
+        :root {
+            --ui-font-size: 1.4vh;
+            --layer-base: 0;
+        }
+
         body {
             margin: 0;
             overflow: hidden;
             font-family: Arial, Helvetica, sans-serif;
             color: #FFFFFF;
+            font-size: var(--ui-font-size);
         }
 
         :any-link {
@@ -26,7 +33,7 @@
         }
 
         .note {
-            font-size: 1.5vh;
+            font-size: var(--ui-font-size);
             font-weight: lighter;
         }
 
@@ -35,41 +42,43 @@
             top: 0px;
             width: 100%;
             padding-top: 3vh;
-            font-size: 1.75vh;
+            font-size: var(--ui-font-size);
             text-align: center;
-            z-index: 1;
+            z-index: var(--layer-base);
         }
 
         .footer {
             position: absolute;
             bottom: 0px;
             left: 0%;
-            padding: 1.5vh;
-            font-size: 1.1vh;
-            z-index: 1;
+            font-size: var(--ui-font-size);
+            z-index: var(--layer-base);
             width: 100%;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 1.5vh;
             text-align: center;
+            background: rgba(31, 38, 47, 0.95);
+            box-shadow: 0 -20px 40px rgba(31, 38, 47, 0.95);
         }
 
         .footer-info {
-            line-height: 1.5;
-            max-width: 520px;
+            /* line-height: 1.5; */
+            /* max-width: 520px; */
+            margin-bottom: 0.5vh;
         }
 
         #canvas {
-            height: 100%;
+            height: calc(100% - 6vh);
             width: 100%;
+            /* margin-bottom: 6vh; */
         }
 
         .interval-label {
             color: #666666;
-            font-size: 1.75vh;
+            font-size: var(--ui-font-size);
         }
 
         .scale-selector-top {
@@ -79,7 +88,7 @@
 
         .scale-meta {
             display: block;
-            font-size: 1.65vh;
+            font-size: var(--ui-font-size);
             color: #cccccc;
             margin-top: 0.4vh;
         }
@@ -103,7 +112,7 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5vh;
-            font-size: 1.2vh;
+            font-size: var(--ui-font-size);
             color: #cccccc;
             margin-top: 0.5vh;
         }
@@ -113,7 +122,7 @@
             border: 1px solid #00e19e;
             color: #00e19e;
             padding: 0.4vh 1vh;
-            font-size: 1.3vh;
+            font-size: var(--ui-font-size);
             cursor: pointer;
             border-radius: 4px;
             transition: all 0.2s;
@@ -134,6 +143,7 @@
             min-height: 1.8vh;
             display: inline-block;
             margin-top: 0.5vh;
+            font-size: var(--ui-font-size);
         }
 
         .footer .midi-status {
@@ -145,6 +155,7 @@
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 0.08em;
+            font-size: var(--ui-font-size);
         }
 
         .midi-footer {
@@ -157,7 +168,7 @@
             color: #00e19e;
             width: 3.6vh;
             height: 3.6vh;
-            font-size: 1.3vh;
+            font-size: var(--ui-font-size);
             cursor: pointer;
             text-align: center;
             transition: all 0.2s;
@@ -187,7 +198,7 @@
         }
 
         .scale-selector label {
-            font-size: 1.5vh;
+            font-size: var(--ui-font-size);
             color: #f7d230;
         }
 
@@ -195,7 +206,7 @@
             background-color: #1f262f;
             border: 1px solid #00e19e;
             color: #FFFFFF;
-            font-size: 1.6vh;
+            font-size: var(--ui-font-size);
             padding: 0.4vh 0.8vh;
             border-radius: 4px;
             min-width: 14vh;
@@ -232,7 +243,7 @@
             color: white;
             background-color: rgba(255, 255, 255, 0);
             padding: 14px 28px;
-            font-size: 1em;
+            font-size: var(--ui-font-size);
             cursor: pointer;
             text-decoration: none;
         }
@@ -274,37 +285,27 @@
     </div>
     <div id="canvas"></div>
     <div class='footer'>
+        <div class='midi-footer'>
+            <button id='midi-btn' class='midi-btn'>Povolit MIDI</button>
+            <span id='midi-status' class='midi-status'>Nepřipojeno</span>
+            <label class='midi-filter-toggle'>
+                <input type='checkbox' id='midi-filter' checked>
+                Hrát jen tóny ve stupnici
+            </label>
+        </div>
         <div class='footer-info'>
             Zobraz: <a href='javascript:void(0)' id='flat'>Béčka</a> / <a href='javascript:void(0)'
-                id='sharp'>Křížky</a><br>
+                id='sharp'>Křížky</a>
             Styl intervalů:
             <span id="interval-styles">
                 <a href='javascript:void(0)' id='arc'>Oblouky</a> /
                 <a href='javascript:void(0)' id='gear'>Ozubené</a> /
                 <a href='javascript:void(0)' id='pie'>Výseče</a>
             </span>
-            <br><br>
-            <span style='color: #00e19e'>See Scales Plus</span><br>
-            původní autor: Mark Racette<br>
-            kontakt: <a href="mailto:markracette@gmail.com">email</a>
-            sítě:
-            <a href="https://instagram.com/rgb.ig" target="_blank" class="fa fa-instagram"></a>
-            <a href="https://www.twitter.com/markracette" target="_blank" class="fa fa-twitter"></a>
-            <a href="https://www.github.com/mracette" target="_blank" class="fa fa-github"></a>
             <br>
-            autor vylepšení: Tomáš Mark<br>
-            kontakt: <a href="mailto:tomas@digitalspace.name">email</a>
-            sítě:
+            Mark Racette, Tomáš Mark -
             <a href="https://github.com/tomasmark79/scales" target="_blank" class="fa fa-github"></a>
-        </div>
-        <div class='midi-footer'>
-            <span class='midi-footer-title'>MIDI ovládání</span><br>
-            <button id='midi-btn' class='midi-btn'>Povolit MIDI</button><br>
-            <span id='midi-status' class='midi-status'>Nepřipojeno</span><br>
-            <label class='midi-filter-toggle'>
-                <input type='checkbox' id='midi-filter' checked>
-                Hrát jen tóny ve stupnici
-            </label>
+            <a href="mailto:tomas@digitalspace.name" target="_blank" class="fa fa-envelope"></a>
         </div>
     </div>
     <script src="./lib/three.min.js"></script>

@@ -1,6 +1,6 @@
 
 const KEYBOARD_SIZE_MULTIPLIER = 0.7;
-const KEYBOARD_VERTICAL_OFFSET = 6;
+const KEYBOARD_VERTICAL_OFFSET = 6.2;
 
 initKeyboard();
 
