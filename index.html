@@ -11,6 +11,7 @@
         :root {
             --ui-font-size: 1.4vh;
             --layer-base: 0;
+            --footer-clearance: 4vh;
         }
 
         body {
@@ -62,6 +63,7 @@
             text-align: center;
             background: rgba(31, 38, 47, 0.95);
             box-shadow: 0 -20px 40px rgba(31, 38, 47, 0.95);
+            padding: 1.2vh 0 1.6vh;
         }
 
         .footer-info {
@@ -71,7 +73,7 @@
         }
 
         #canvas {
-            height: calc(100% - 6vh);
+            height: calc(100% - var(--footer-clearance));
             width: 100%;
             /* margin-bottom: 6vh; */
         }
