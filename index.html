@@ -49,22 +49,16 @@
             width: 100%;
             box-sizing: border-box;
             display: flex;
-            justify-content: space-between;
-            gap: 2vh;
-            flex-wrap: wrap;
-            align-items: flex-start;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5vh;
+            text-align: center;
         }
 
-        .footer-section {
-            flex: 1 1 260px;
-        }
-
-        .footer-left {
-            text-align: left;
-        }
-
-        .footer-right {
-            text-align: right;
+        .footer-info {
+            line-height: 1.5;
+            max-width: 520px;
         }
 
         #canvas {
@@ -141,7 +135,7 @@
             margin-top: 0.5vh;
         }
 
-        .footer-right .midi-status {
+        .footer .midi-status {
             display: block;
         }
 
@@ -279,7 +273,7 @@
     </div>
     <div id="canvas"></div>
     <div class='footer'>
-        <div class='footer-section footer-left'>
+        <div class='footer-info'>
             Zobraz: <a href='javascript:void(0)' id='flat'>Béčka</a> / <a href='javascript:void(0)'
                 id='sharp'>Křížky</a><br>
             Styl intervalů:
@@ -297,21 +291,19 @@
             <a href="https://www.twitter.com/markracette" target="_blank" class="fa fa-twitter"></a>
             <a href="https://www.github.com/mracette" target="_blank" class="fa fa-github"></a>
             <br>
-            vylepšení: Tomáš Mark + LLM<br>
+            vylepšení: Tomáš Mark<br>
             kontakt: <a href="mailto:tomas@digitalspace.name">email</a>
             sítě:
             <a href="https://www.github.com/tomasmark79" target="_blank" class="fa fa-github"></a>
         </div>
-        <div class='footer-section footer-right'>
-            <div class='midi-footer'>
-                <span class='midi-footer-title'>MIDI ovládání</span><br>
-                <button id='midi-btn' class='midi-btn'>Povolit MIDI</button><br>
-                <span id='midi-status' class='midi-status'>Nepřipojeno</span><br>
-                <label class='midi-filter-toggle'>
-                    <input type='checkbox' id='midi-filter' checked>
-                    Hrát jen tóny ve stupnici
-                </label>
-            </div>
+        <div class='midi-footer'>
+            <span class='midi-footer-title'>MIDI ovládání</span><br>
+            <button id='midi-btn' class='midi-btn'>Povolit MIDI</button><br>
+            <span id='midi-status' class='midi-status'>Nepřipojeno</span><br>
+            <label class='midi-filter-toggle'>
+                <input type='checkbox' id='midi-filter' checked>
+                Hrát jen tóny ve stupnici
+            </label>
         </div>
     </div>
     <script src="./lib/three.min.js"></script>
