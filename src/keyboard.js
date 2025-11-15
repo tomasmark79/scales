@@ -1,11 +1,14 @@
 
+const KEYBOARD_SIZE_MULTIPLIER = 0.7;
+const KEYBOARD_VERTICAL_OFFSET = 6;
+
 initKeyboard();
 
 function initKeyboard() {
 
     keyboardGroup = new THREE.Group();
     let whiteKeyIndices = [0,2,4,5,7,9,11,12,14,16,17,19,21,23];
-    let whiteKeyThickness = .75;
+    let whiteKeyThickness = 0.75 * KEYBOARD_SIZE_MULTIPLIER;
     let whiteKeyBorder = whiteKeyThickness / 7;
 
     for (let i = 0; i < 14; i++) {
@@ -29,14 +32,14 @@ function initKeyboard() {
         
         keyGroup.add(wkiMesh, wkoMesh);
 
-        keyGroup.translateX((whiteKeyThickness - whiteKeyBorder) * i);
-        keyGroup.translateZ(carouselRadius);
-        keyGroup.translateY(-8);
+    keyGroup.translateX((whiteKeyThickness - whiteKeyBorder) * i);
+    keyGroup.translateZ(carouselRadius);
+    keyGroup.translateY(KEYBOARD_VERTICAL_OFFSET);
 
         keyboardGroup.add(keyGroup);
     }
 
-    let blackKeyThickness = 0.45;
+    let blackKeyThickness = 0.45 * KEYBOARD_SIZE_MULTIPLIER;
     let blackKeyIndices = [1,3,6,8,10,13,15,18,20,22];
     let blackKeyBorder = blackKeyThickness / 7;
 
@@ -66,7 +69,7 @@ function initKeyboard() {
 
             keyGroup.translateX(whiteKeyThickness / 2 - whiteKeyBorder + (whiteKeyThickness - whiteKeyBorder) * j);
             keyGroup.translateZ(carouselRadius + .00001);
-            keyGroup.translateY(-8 + (whiteKeyThickness - blackKeyThickness) * 3/2);
+            keyGroup.translateY(KEYBOARD_VERTICAL_OFFSET + (whiteKeyThickness - blackKeyThickness) * 3/2);
 
             keyboardGroup.add(keyGroup);
 
