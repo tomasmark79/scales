@@ -1,7 +1,7 @@
 [
     {
         "name" : "Major",
-        "category" : "Common",
+            "category" : "Běžné",
         "feelings" : "jasný, veselý, nadějný, triumfální",
         "intervals" : [
             2,2,1,2,2,2,1
@@ -9,7 +9,7 @@
     },
     {
         "name" : "Melodic Minor",
-        "category" : "Common",
+            "category" : "Běžné",
         "feelings" : "melancholický, introspektivní, elegantní, dramatický",
         "intervals" : [
             2,1,2,2,2,2,1
@@ -17,7 +17,7 @@
     },
     {
         "name" : "Harmonic Minor",
-        "category" : "Common",
+            "category" : "Běžné",
         "feelings" : "exotický, tmavý, tajemný, vášnivý",
         "intervals" : [
             2,1,2,2,1,3,1
@@ -25,7 +25,7 @@
     },
     {
         "name" : "Major Pentatonic",
-        "category" : "Common",
+            "category" : "Běžné",
         "feelings" : "teplý, otevřený, klidný, jednoduchý",
         "intervals" : [
             2,2,3,2,3
@@ -33,7 +33,7 @@
     },
     {
         "name" : "Minor Pentatonic",
-        "category" : "Common",
+            "category" : "Běžné",
         "feelings" : "duševní, bluesový, introspektivní, cool",
         "intervals" : [
             3,2,2,3,2
@@ -129,7 +129,7 @@
     },
     {
         "name" : "Chromatic",
-        "category" : "Uncommon",
+            "category" : "Neobvyklé",
         "feelings" : "atonální, disonantní, experimentální, znepokojivý",
         "intervals" : [
             1,1,1,1,1,1,1,1,1,1,1,1
@@ -137,7 +137,7 @@
     },
     {
         "name" : "Whole Tone",
-        "category" : "Uncommon",
+            "category" : "Neobvyklé",
         "feelings" : "snový, surrealistický, éterický, tajemný",
         "intervals" : [
             2,2,2,2,2,2
@@ -145,7 +145,7 @@
     },
     {
         "name" : "Altered",
-        "category" : "Uncommon",
+            "category" : "Neobvyklé",
         "feelings" : "napjatý, disonantní, авангардный, komplexní",
         "intervals" : [
             1,2,1,2,2,2,2
@@ -153,7 +153,7 @@
     },
     {
         "name" : "Octatonic",
-        "category" : "Uncommon",
+            "category" : "Neobvyklé",
         "feelings" : "tajemný, tmavý, rytmický, hypnotický",
         "intervals" : [
             2,1,2,1,2,1,2,1
@@ -161,7 +161,7 @@
     },
     {
         "name" : "Diminished",
-        "category" : "Uncommon",
+            "category" : "Neobvyklé",
         "feelings" : "tmavý, hrozivý, znepokojivý, napjatý",
         "intervals" : [
             1,2,1,2,1,2,1,2
