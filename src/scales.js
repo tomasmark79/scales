@@ -466,6 +466,9 @@ function visualize(data){
 
             scene.add(masterGroup);
 
+            // hide all scales except the active one
+            updateScaleVisibility();
+
             createScaleSelector(scene.userData.data || []);
             updateScaleSelectorValue();
 
@@ -1002,6 +1005,7 @@ function setScaleIndex(newIndex, animate = true) {
     scaleshift = normalizedIndex;
 
     animateCarouselToCurrentScale(animate);
+    updateScaleVisibility();
 
     updateLabels(masterGroup.children[scaleshift].userData.notes, animate);
     displayKeyboard();
@@ -1032,6 +1036,16 @@ function animateCarouselToCurrentScale(animate) {
         .start();
 
     tweens.add(t);
+}
+
+function updateScaleVisibility() {
+    if (!masterGroup || !masterGroup.children.length) {
+        return;
+    }
+
+    for (let i = 0; i < masterGroup.children.length; i++) {
+        masterGroup.children[i].visible = (i === scaleshift);
+    }
 }
 
 function rotateCarousel(dir){
